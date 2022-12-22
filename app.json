@@ -28,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2d555b69-5a8c-47de-ab74-13a5206b2dbc"
+      }
+    },
+    "owner": "apavlick"
   }
 }
