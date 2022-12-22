@@ -1,31 +1,30 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import FontAwesome5Icons from "react-native-vector-icons/FontAwesome5";
 import HomeScreen from "./screens/HomeScreen";
 import SearchScreen from "./screens/SearchScreen";
 import { useCallback } from "react";
-// import { StatusBar, StyleSheet, View, Text } from "react-native";
+import { useFonts, Sora_400Regular } from "@expo-google-fonts/sora";
 
 SplashScreen.preventAutoHideAsync();
 
 const Tab = createBottomTabNavigator();
 
 function App() {
-  // const [fontsLoaded] = useFonts({
-  //   primary: require("./assets/fonts/Sora-VariableFont_wght.ttf"),
-  // });
+  let [fontsLoaded] = useFonts({
+    Sora_400Regular,
+  });
 
-  // const onLayoutRootView = useCallback(async () => {
-  //   if (fontsLoaded) {
-  //     await SplashScreen.hideAsync();
-  //   }
-  // }, [fontsLoaded]);
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
-  // if (!fontsLoaded) {
-  //   return null;
-  // }
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <NavigationContainer>
@@ -40,10 +39,9 @@ function App() {
           component={HomeScreen}
           options={{
             tabBarLabel: "Home",
-            // tabBarLabelStyle: {
-            //   // fontFamily: "primary",
-            //   fontWeight: "bold",
-            // },
+            tabBarLabelStyle: {
+              fontFamily: "Sora_400Regular",
+            },
             tabBarIcon: ({ color, size }) => (
               <FontAwesome5Icons name="home" color={color} size={size} />
             ),
