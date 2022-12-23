@@ -6,10 +6,21 @@ import HomeScreen from "./screens/HomeScreen";
 import SearchScreen from "./screens/SearchScreen";
 import { useCallback } from "react";
 import { useFonts, Sora_400Regular } from "@expo-google-fonts/sora";
+import {
+  provideHeadless,
+  SearchHeadlessProvider,
+} from "@yext/search-headless-react";
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 const Tab = createBottomTabNavigator();
+
+const searcher = provideHeadless({
+  apiKey: "10a44dca245f5fd3faba055fd4d28e1d",
+  experienceKey: "toast",
+  locale: "en",
+  verticalKey: "beverages",
+});
 
 function App() {
   let [fontsLoaded] = useFonts({
@@ -27,63 +38,41 @@ function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          tabBarActiveTintColor: "#e91e63",
-        }}
-      >
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            tabBarLabel: "Home",
-            tabBarLabelStyle: {
-              fontFamily: "Sora_400Regular",
-            },
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome5Icons name="home" color={color} size={size} />
-            ),
+    <SearchHeadlessProvider searcher={searcher}>
+      <NavigationContainer>
+        <Tab.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            tabBarActiveTintColor: "#e91e63",
           }}
-        />
-        <Tab.Screen
-          name="Search"
-          component={SearchScreen}
-          options={{
-            tabBarLabel: "Search",
-            // tabBarLabelStyle: {
-            //   // fontFamily: "primary",
-            // },
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome5Icons name="search" color={color} size={size} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+        >
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              tabBarLabel: "Home",
+              tabBarLabelStyle: {
+                fontFamily: "Sora_400Regular",
+              },
+              tabBarIcon: ({ color, size }) => (
+                <FontAwesome5Icons name="home" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Search"
+            component={SearchScreen}
+            options={{
+              tabBarLabel: "Search",
+              tabBarIcon: ({ color, size }) => (
+                <FontAwesome5Icons name="search" color={color} size={size} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </SearchHeadlessProvider>
   );
 }
 
 export default App;
-
-// import { StatusBar } from "expo-status-bar";
-// import { StyleSheet, Text, View } from "react-native";
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Open up App.js to start working on your app!</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
