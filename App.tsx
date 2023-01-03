@@ -11,6 +11,11 @@ import {
   SearchHeadlessProvider,
 } from "@yext/search-headless-react";
 
+/** Under the hood, Search UI React is using Search Core which makes use of the URL object.
+ * The URL object is not available in React Native's JavaScript runtime by default, so the next line adds support for it.
+ * */
+import "react-native-url-polyfill/auto";
+
 // SplashScreen.preventAutoHideAsync();
 
 const Tab = createBottomTabNavigator();
