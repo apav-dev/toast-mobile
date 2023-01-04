@@ -1,17 +1,13 @@
 import { HighlightedValue } from "@yext/search-headless-react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TextStyle } from "react-native";
 
 /**
   The CSS class interface for {@link renderHighlightedValue}.
   @public
 */
 export interface HighlightedValueCssClasses {
-  highlighted?: {
-    [key: string]: string;
-  };
-  nonHighlighted?: {
-    [key: string]: string;
-  };
+  highlighted?: TextStyle;
+  nonHighlighted?: TextStyle;
 }
 
 /**
@@ -59,7 +55,7 @@ export function renderHighlightedValue(
       </Text>
     );
   }
-  return <View style={{ flexDirection: "row" }}>{highlightedJSX}</View>;
+  return <Text numberOfLines={2}>{highlightedJSX}</Text>;
 }
 
 const styles = StyleSheet.create({

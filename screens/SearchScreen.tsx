@@ -1,5 +1,5 @@
 import { AutocompleteResult } from "@yext/search-headless-react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Text, ScrollView, Image } from "react-native";
 import SearchBar from "../components/SearchBar";
 import Ce_beverage from "../types/beverages";
 import { renderHighlightedValue } from "../components/utils/renderHighlightedValue";
@@ -20,7 +20,7 @@ const SearchScreen = () => {
     )?.results;
 
     return (
-      <ScrollView style={{ height: "100%", paddingTop: 16 }}>
+      <ScrollView style={{ height: "100%", marginTop: 16, marginBottom: 16 }}>
         {beverageCategoryResults?.map((result) => {
           const categoryName = result.matchedSubstrings
             ? {
@@ -31,28 +31,22 @@ const SearchScreen = () => {
           return (
             <View key={uuid()} style={styles.entityContainer}>
               {renderHighlightedValue(categoryName, {
-                highlighted: {
-                  color: "orange",
-                  fontWeight: "bold",
-                  fontFamily: "Sora_400Regular",
-                },
-                nonHighlighted: {
-                  color: "black",
-                  fontWeight: "400",
-                  fontFamily: "Sora_400Regular",
-                },
+                highlighted: styles.highlighted,
+                nonHighlighted: styles.nonHighlighted,
               })}
             </View>
           );
         })}
         {/* divider line view component */}
-        <View
-          style={{
-            height: 1,
-            backgroundColor: "lightgrey",
-            marginHorizontal: 24,
-          }}
-        />
+        {beverageCategoryResults?.length > 0 && beverageResults?.length > 0 && (
+          <View
+            style={{
+              height: 1,
+              backgroundColor: "lightgrey",
+              marginHorizontal: 24,
+            }}
+          />
+        )}
         {beverageResults?.map((result) => {
           const beverageName = result.matchedSubstrings
             ? {
@@ -60,21 +54,32 @@ const SearchScreen = () => {
                 matchedSubstrings: result.matchedSubstrings,
               }
             : result.value;
-          const beverage = result.relatedItem as Ce_beverage;
+          const beverage = result.relatedItem?.rawData as unknown as
+            | Ce_beverage
+            | undefined;
+          const beverageImg = beverage?.primaryPhoto?.image.url;
+          console.log(beverageImg);
           return (
-            <View key={uuid()} style={styles.entityContainer}>
-              {renderHighlightedValue(beverageName, {
-                highlighted: {
-                  color: "orange",
-                  fontWeight: "bold",
-                  fontFamily: "Sora_400Regular",
-                },
-                nonHighlighted: {
-                  color: "black",
-                  fontWeight: "400",
-                  fontFamily: "Sora_400Regular",
-                },
-              })}
+            <View
+              key={uuid()}
+              style={{
+                ...styles.entityContainer,
+                flexDirection: "row",
+                alignContent: "center",
+              }}
+            >
+              <Image
+                source={{ uri: beverageImg }}
+                resizeMode="contain"
+                style={{ width: 60, height: 60 }}
+                defaultSource={require("../assets/bottle.png")}
+              />
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                {renderHighlightedValue(beverageName, {
+                  highlighted: styles.highlighted,
+                  nonHighlighted: styles.nonHighlighted,
+                })}
+              </View>
             </View>
           );
         })}
@@ -122,5 +127,20 @@ const styles = StyleSheet.create({
   entityText: {
     fontFamily: "Sora_400Regular",
     fontSize: 16,
+  },
+  highlighted: {
+    color: "orange",
+    fontWeight: "bold",
+    fontFamily: "Sora_400Regular",
+    fontSize: 16,
+    overflow: "hidden",
+    numberOfLines: 1,
+  },
+  nonHighlighted: {
+    color: "black",
+    fontWeight: "400",
+    fontFamily: "Sora_400Regular",
+    fontSize: 16,
+    numberOfLines: 1,
   },
 });
