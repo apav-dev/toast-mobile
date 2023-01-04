@@ -2,13 +2,13 @@ import { AutocompleteResult } from "@yext/search-headless-react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import SearchBar from "../components/SearchBar";
 import Ce_beverage from "../types/beverages";
+import { renderHighlightedValue } from "../components/utils/renderHighlightedValue";
 import { v4 as uuid } from "uuid";
 
 const SearchScreen = () => {
   const renderEntityPreviews = (
     sections: {
-      /** label will only have value if the sectioned prop equals true*/
-      label?: string;
+      label: string;
       results: AutocompleteResult[];
     }[]
   ) => {
@@ -19,29 +19,62 @@ const SearchScreen = () => {
       (section) => section.label === "Name"
     )?.results;
 
-    // console.log("test");
-
-    // return <View style={{ height: 96, backgroundColor: "black" }}></View>;
-
     return (
-      <ScrollView style={{ height: "100%" }}>
+      <ScrollView style={{ height: "100%", paddingTop: 16 }}>
         {beverageCategoryResults?.map((result) => {
-          console.log(result.value);
+          const categoryName = result.matchedSubstrings
+            ? {
+                value: result.value,
+                matchedSubstrings: result.matchedSubstrings,
+              }
+            : result.value;
           return (
-            <View key={uuid()}>
-              <Text>{result.value}</Text>
+            <View key={uuid()} style={styles.entityContainer}>
+              {renderHighlightedValue(categoryName, {
+                highlighted: {
+                  color: "orange",
+                  fontWeight: "bold",
+                  fontFamily: "Sora_400Regular",
+                },
+                nonHighlighted: {
+                  color: "black",
+                  fontWeight: "400",
+                  fontFamily: "Sora_400Regular",
+                },
+              })}
             </View>
           );
         })}
+        {/* divider line view component */}
+        <View
+          style={{
+            height: 1,
+            backgroundColor: "lightgrey",
+            marginHorizontal: 24,
+          }}
+        />
         {beverageResults?.map((result) => {
-          console.log(result.value);
-
+          const beverageName = result.matchedSubstrings
+            ? {
+                value: result.value,
+                matchedSubstrings: result.matchedSubstrings,
+              }
+            : result.value;
           const beverage = result.relatedItem as Ce_beverage;
           return (
-            <View style={{ padding: 4 }} key={uuid}>
-              <Text style={{ fontFamily: "Sora_400Regular" }}>
-                {result.value}
-              </Text>
+            <View key={uuid()} style={styles.entityContainer}>
+              {renderHighlightedValue(beverageName, {
+                highlighted: {
+                  color: "orange",
+                  fontWeight: "bold",
+                  fontFamily: "Sora_400Regular",
+                },
+                nonHighlighted: {
+                  color: "black",
+                  fontWeight: "400",
+                  fontFamily: "Sora_400Regular",
+                },
+              })}
             </View>
           );
         })}
@@ -81,5 +114,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  entityContainer: {
+    marginHorizontal: 24,
+    marginVertical: 16,
+  },
+  entityText: {
+    fontFamily: "Sora_400Regular",
+    fontSize: 16,
   },
 });

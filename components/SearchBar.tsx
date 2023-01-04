@@ -4,7 +4,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  TouchableWithoutFeedback,
   Animated,
   Text,
 } from "react-native";
@@ -13,10 +12,8 @@ import {
   SearchParameterField,
   FilterSearchResponse,
   AutocompleteResult,
-  useSearchState,
 } from "@yext/search-headless-react";
 import { useSynchronizedRequest } from "../hooks/useSynchronizedRequest";
-import { v4 as uuid } from "uuid";
 
 type SearchBarProps = {
   /**
@@ -83,6 +80,12 @@ const SearchBar = ({
     }).start();
   }, [isFocused]);
 
+  useEffect(() => {
+    if (input.length === 0) {
+      clearFilterSearchResponse();
+    }
+  }, [input]);
+
   const [filterSearchResponse, executeFilterSearch, clearFilterSearchResponse] =
     useSynchronizedRequest<string, FilterSearchResponse>(
       (inputValue) => {
@@ -106,6 +109,9 @@ const SearchBar = ({
   const handleCancelSearch = () => {
     inputRef.current!.blur();
     setIsFocused(false);
+    setInput("");
+    searchActions.setQuery("");
+    clearFilterSearchResponse();
   };
 
   const handleTextChange = (text: string) => {
@@ -113,12 +119,12 @@ const SearchBar = ({
       if (filterSearchFields) {
         executeFilterSearch(text);
       } else {
-        searchActions.setQuery(text);
         searchActions.executeVerticalAutocomplete();
         searchActions.executeVerticalQuery();
       }
     }
     setInput(text);
+    searchActions.setQuery(text);
   };
 
   const filterSearchResults = useMemo(() => {
