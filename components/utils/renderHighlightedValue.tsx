@@ -1,5 +1,5 @@
 import { HighlightedValue } from "@yext/search-headless-react";
-import { View, Text, StyleSheet, TextStyle } from "react-native";
+import { Text, StyleSheet, TextStyle } from "react-native";
 
 /**
   The CSS class interface for {@link renderHighlightedValue}.

@@ -13,6 +13,7 @@ import {
   FilterSearchResponse,
   AutocompleteResult,
 } from "@yext/search-headless-react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSynchronizedRequest } from "../hooks/useSynchronizedRequest";
 
 type SearchBarProps = {
@@ -157,6 +158,30 @@ const SearchBar = ({
     return [];
   }, [filterSearchResponse]);
 
+  const storeRecentSearches = async (search: string) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("recentSearches");
+      const recentSearches = jsonValue != null ? JSON.parse(jsonValue) : [];
+      recentSearches.push(search);
+      const uniqueRecentSearches = recentSearches.filter(
+        (search, index, self) => self.indexOf(search) === index
+      );
+      const jsonRecentSearches = JSON.stringify(uniqueRecentSearches);
+      await AsyncStorage.setItem("recentSearches", jsonRecentSearches);
+    } catch (e) {
+      console.error("Error saving recent searches.\n", e);
+    }
+  };
+
+  const fetchRecentSearches = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("recentSearches");
+      return jsonValue != null ? JSON.parse(jsonValue) : [];
+    } catch (e) {
+      console.error("Error fetching recent searches.\n", e);
+    }
+  };
+
   const renderAutocompleteSuggestions = () => {
     if (filterSearchFields && filterSearchResults.length > 0) {
       if (renderEntityPreviews) {
@@ -198,6 +223,7 @@ const SearchBar = ({
           ]}
         >
           <TextInput
+            style={styles.inputText}
             ref={inputRef}
             onFocus={handleFocusSearch}
             placeholder={placeholder}
@@ -246,6 +272,9 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 8,
     justifyContent: "center",
+    fontFamily: "Sora_400Regular",
+  },
+  inputText: {
     fontFamily: "Sora_400Regular",
   },
   autocompleteContainer: {

@@ -1,11 +1,32 @@
 import { AutocompleteResult } from "@yext/search-headless-react";
-import { View, StyleSheet, Text, ScrollView, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import SearchBar from "../components/SearchBar";
 import Ce_beverage from "../types/beverages";
 import { renderHighlightedValue } from "../components/utils/renderHighlightedValue";
 import { v4 as uuid } from "uuid";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamList } from "../App";
 
-const SearchScreen = () => {
+type SearchScreenNavigationProps = StackScreenProps<
+  RootStackParamList,
+  "Results"
+>;
+
+const SearchScreen = ({ navigation }: SearchScreenNavigationProps) => {
+  const handleEntityPress = (result: AutocompleteResult) => {
+    if (result.key === "c_beverageCategories.name") {
+      navigation.navigate("Results", {
+        beverageTypeName: result.value,
+      });
+    }
+  };
+
   const renderEntityPreviews = (
     sections: {
       label: string;
@@ -29,12 +50,16 @@ const SearchScreen = () => {
               }
             : result.value;
           return (
-            <View key={uuid()} style={styles.entityContainer}>
+            <TouchableOpacity
+              key={uuid()}
+              style={styles.entityContainer}
+              onPress={() => handleEntityPress(result)}
+            >
               {renderHighlightedValue(categoryName, {
                 highlighted: styles.highlighted,
                 nonHighlighted: styles.nonHighlighted,
               })}
-            </View>
+            </TouchableOpacity>
           );
         })}
         {/* divider line view component */}
@@ -58,14 +83,17 @@ const SearchScreen = () => {
             | Ce_beverage
             | undefined;
           const beverageImg = beverage?.primaryPhoto?.image.url;
-          console.log(beverageImg);
           return (
-            <View
+            <TouchableOpacity
               key={uuid()}
               style={{
                 ...styles.entityContainer,
                 flexDirection: "row",
                 alignContent: "center",
+              }}
+              onPress={() => {
+                // TODO: navigate to beverage details screen
+                console.log("Navigate to Beverage Details Screen");
               }}
             >
               <Image
@@ -80,7 +108,7 @@ const SearchScreen = () => {
                   nonHighlighted: styles.nonHighlighted,
                 })}
               </View>
-            </View>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>
@@ -90,6 +118,7 @@ const SearchScreen = () => {
   return (
     <View style={styles.container}>
       <SearchBar
+        placeholder="Search for Wine, Beer, or Spirits"
         filterSearchFields={[
           {
             searchParameterField: {
