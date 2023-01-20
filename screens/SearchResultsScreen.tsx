@@ -6,15 +6,30 @@ import {
   useSearchState,
 } from "@yext/search-headless-react";
 import { useEffect, useRef, useState } from "react";
-import { View, StyleSheet, Text, FlatList, Image } from "react-native";
-import { RootStackParamList } from "../App";
+import {
+  View,
+  StyleSheet,
+  Text,
+  FlatList,
+  Image,
+  Dimensions,
+} from "react-native";
+import { SearchStackParamList } from "../App";
 import { v4 as uuid } from "uuid";
 
 export type SearchResultsScreenRouteProps = StackScreenProps<
-  RootStackParamList,
+  SearchStackParamList,
   "Results"
 >;
 
+const placeholderImg = require("../assets/bottle.png");
+
+/**
+ * 1. Performance of long list of results with images
+ * 3. typing
+ * 4. loading indicator
+ * 5. more info on cards
+ */
 const SearchResultsScreen = ({
   route,
   navigation,
@@ -84,9 +99,8 @@ const SearchResultsScreen = ({
       return <Text style={styles.titleText}>{beverageTypeName}</Text>;
     } else if (query) {
       return (
-        <Text style={styles.titleText}>
-          <Text>Results for </Text>
-          {`"${query}"`}
+        <Text style={{ ...styles.titleText, color: "black" }}>
+          <Text>{`Results for "${query}"`}</Text>
         </Text>
       );
     }
@@ -94,22 +108,35 @@ const SearchResultsScreen = ({
 
   // TODO: move to separate component
   const renderBeverageResult = ({ item, index }) => {
+    // the item has a primaryPhoto field, but it is not always populated. If it is check if primaryPhoto.image.thumbnails exists, if it does, find the smallest thumbnail in the list, otherwise use primaryPhoto.image.url
+
+    const smallestThumbnail = item.rawData?.primaryPhoto?.image.thumbnails
+      ? item.rawData?.primaryPhoto?.image.thumbnails?.reduce(
+          (smallest, current) => {
+            if (current.width < smallest.width) {
+              return current;
+            }
+            return smallest;
+          }
+        )
+      : item.rawData?.primaryPhoto?.image.url;
+
     return (
-      <View style={{ flex: 1 / 2 }}>
+      <View style={{ flex: 1 / 2, height: 200, marginVertical: 12 }}>
         <View style={styles.beverageResultContainer}>
           <View
             style={{
               padding: 20,
               borderWidth: 1,
-              borderColor: "gray",
+              // borderColor: "gray",
               borderRadius: 8,
             }}
           >
             <Image
-              source={{ uri: item.rawData?.primaryPhoto?.image.url }}
+              source={{ uri: smallestThumbnail.url }}
               resizeMode="contain"
               style={{ width: 120, height: 120 }}
-              defaultSource={require("../assets/bottle.png")}
+              defaultSource={placeholderImg}
             />
             <Text numberOfLines={2}>{item.rawData?.name}</Text>
           </View>
@@ -139,13 +166,18 @@ const SearchResultsScreen = ({
         )}
       </View>
       <FlatList
-        style={{ marginBottom: 32 }}
         data={displayableResults}
         keyExtractor={(item) => uuid()}
         onEndReached={loadMoreItems}
         onEndReachedThreshold={0.3}
         renderItem={renderBeverageResult}
         numColumns={2}
+        getItemLayout={(data, index) => ({
+          length: 200,
+          offset: 200 * index,
+          index,
+        })}
+
         // TODO: add ListFooterComponent loader
       />
     </View>
@@ -185,6 +217,7 @@ const styles = StyleSheet.create({
   },
   beverageResultContainer: {
     padding: 8,
+    borderColor: "gray",
   },
 });
 

@@ -36,6 +36,10 @@ type SearchBarProps = {
 
   /** A function that renders the autocomplete suggestions. */
   renderEntityPreviews?: RenderEntityPreviews;
+
+  /** A function that is called when the user submits a search. */
+  // TODO: add default function that executes a search
+  onSearch?: (query: string) => void;
 };
 
 export type RenderEntityPreviews = (
@@ -59,6 +63,7 @@ const SearchBar = ({
   disableAutocomplete,
   filterSearchFields,
   renderEntityPreviews,
+  onSearch,
 }: SearchBarProps) => {
   const inputRef = useRef<TextInput>(null);
 
@@ -116,6 +121,8 @@ const SearchBar = ({
   };
 
   const handleTextChange = (text: string) => {
+    setInput(text);
+    searchActions.setQuery(text);
     if (!disableAutocomplete && text.length > 0) {
       if (filterSearchFields) {
         executeFilterSearch(text);
@@ -124,8 +131,6 @@ const SearchBar = ({
         searchActions.executeVerticalQuery();
       }
     }
-    setInput(text);
-    searchActions.setQuery(text);
   };
 
   const filterSearchResults = useMemo(() => {
@@ -210,6 +215,12 @@ const SearchBar = ({
     return null;
   };
 
+  const handleSearch = () => {
+    if (onSearch) {
+      onSearch(input);
+    }
+  };
+
   return (
     <>
       <View style={styles.searchBarContainer}>
@@ -229,6 +240,8 @@ const SearchBar = ({
             placeholder={placeholder}
             value={input}
             onChangeText={handleTextChange}
+            returnKeyType={onSearch ? "search" : "done"}
+            onSubmitEditing={handleSearch}
           />
         </Animated.View>
         {isFocused && (

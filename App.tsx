@@ -11,25 +11,45 @@ import {
   provideHeadless,
   SearchHeadlessProvider,
 } from "@yext/search-headless-react";
+import * as dotenv from "dotenv";
 
 /** Under the hood, Search UI React is using Search Core which makes use of the URL object.
  * The URL object is not available in React Native's JavaScript runtime by default, so the next line adds support for it.
  * */
 import "react-native-url-polyfill/auto";
 import SearchResultsScreen from "./screens/SearchResultsScreen";
+import BeverageScreen from "./screens/BeverageScreen";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+// dotenv.config()
 
 // SplashScreen.preventAutoHideAsync();
 
-export type RootStackParamList = {
-  Home: undefined;
+const queryClient = new QueryClient();
+
+export type SearchStackParamList = {
+  BeverageSearch: undefined;
   Results: {
     query?: string;
     beverageTypeName?: string;
   };
+  BeverageScreen: {
+    name: string;
+  };
 };
 
 const Tab = createBottomTabNavigator();
-const RootStack = createStackNavigator<RootStackParamList>();
+const SearchStack = createStackNavigator<SearchStackParamList>();
+
+const SearchStackNavigation = () => {
+  return (
+    <SearchStack.Navigator>
+      <SearchStack.Screen name="BeverageSearch" component={SearchScreen} />
+      <SearchStack.Screen name="Results" component={SearchResultsScreen} />
+      <SearchStack.Screen name="BeverageScreen" component={BeverageScreen} />
+    </SearchStack.Navigator>
+  );
+};
 
 const searcher = provideHeadless({
   apiKey: "10a44dca245f5fd3faba055fd4d28e1d",
@@ -55,13 +75,11 @@ function App() {
 
   return (
     <SearchHeadlessProvider searcher={searcher}>
-      <NavigationContainer>
-        <RootStack.Navigator>
-          {/* TODO: add ability to choose and toggle delivery locations */}
-          <RootStack.Screen name="Root" component={HomeTabs} />
-          <RootStack.Screen name="Results" component={SearchResultsScreen} />
-        </RootStack.Navigator>
-      </NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <HomeTabs />
+        </NavigationContainer>
+      </QueryClientProvider>
     </SearchHeadlessProvider>
   );
 }
@@ -89,7 +107,7 @@ const HomeTabs = () => {
       />
       <Tab.Screen
         name="Search"
-        component={SearchScreen}
+        component={SearchStackNavigation}
         options={{
           tabBarLabel: "Search",
           tabBarIcon: ({ color, size }) => (

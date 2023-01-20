@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import SearchBar from "../components/SearchBar";
-import Ce_beverage from "../types/beverages";
+import Ce_beverage from "../types/search/beverages";
 import { renderHighlightedValue } from "../components/utils/renderHighlightedValue";
 import { v4 as uuid } from "uuid";
 import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "../App";
+import { SearchStackParamList } from "../App";
 
 type SearchScreenNavigationProps = StackScreenProps<
-  RootStackParamList,
+  SearchStackParamList,
   "Results"
 >;
 
@@ -83,6 +83,7 @@ const SearchScreen = ({ navigation }: SearchScreenNavigationProps) => {
             | Ce_beverage
             | undefined;
           const beverageImg = beverage?.primaryPhoto?.image.url;
+          console.log(result.relatedItem?.rawData);
           return (
             <TouchableOpacity
               key={uuid()}
@@ -92,8 +93,9 @@ const SearchScreen = ({ navigation }: SearchScreenNavigationProps) => {
                 alignContent: "center",
               }}
               onPress={() => {
-                // TODO: navigate to beverage details screen
-                console.log("Navigate to Beverage Details Screen");
+                navigation.navigate("BeverageScreen", {
+                  name: beverage?.name,
+                });
               }}
             >
               <Image
@@ -113,6 +115,12 @@ const SearchScreen = ({ navigation }: SearchScreenNavigationProps) => {
         })}
       </ScrollView>
     );
+  };
+
+  const handleSearch = (query: string) => {
+    navigation.navigate("Results", {
+      query,
+    });
   };
 
   return (
@@ -136,6 +144,7 @@ const SearchScreen = ({ navigation }: SearchScreenNavigationProps) => {
             removeDuplicates: true,
           },
         ]}
+        onSearch={handleSearch}
         renderEntityPreviews={renderEntityPreviews}
       />
     </View>
