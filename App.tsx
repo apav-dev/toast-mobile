@@ -6,13 +6,16 @@ import FontAwesome5Icons from "react-native-vector-icons/FontAwesome5";
 import HomeScreen from "./screens/HomeScreen";
 import SearchScreen from "./screens/SearchScreen";
 import { useCallback } from "react";
-import { useFonts, Sora_400Regular } from "@expo-google-fonts/sora";
+import {
+  useFonts,
+  Sora_400Regular,
+  Sora_600SemiBold,
+  Sora_700Bold,
+} from "@expo-google-fonts/sora";
 import {
   provideHeadless,
   SearchHeadlessProvider,
 } from "@yext/search-headless-react";
-import * as dotenv from "dotenv";
-
 /** Under the hood, Search UI React is using Search Core which makes use of the URL object.
  * The URL object is not available in React Native's JavaScript runtime by default, so the next line adds support for it.
  * */
@@ -20,6 +23,11 @@ import "react-native-url-polyfill/auto";
 import SearchResultsScreen from "./screens/SearchResultsScreen";
 import BeverageScreen from "./screens/BeverageScreen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Text } from "react-native";
+import * as Colors from "./styles/colors";
+import * as Typography from "./styles/typography";
+
+export { Colors, Typography };
 
 // dotenv.config()
 
@@ -41,9 +49,36 @@ export type SearchStackParamList = {
 const Tab = createBottomTabNavigator();
 const SearchStack = createStackNavigator<SearchStackParamList>();
 
+const headerOptions = {
+  headerShown: true,
+  headerStyle: {
+    backgroundColor: Colors.primary.orange,
+  },
+  headerTitle(props) {
+    return (
+      <Text
+        style={{
+          // color: Colors.primary.darkRed,
+          // fontFamily: Typography.fontFamily.semiBold,
+          fontFamily: "Sora_600SemiBold",
+          fontSize: 24,
+        }}
+      >
+        TOAST
+      </Text>
+    );
+  },
+  headerBackTitleVisible: false,
+  headerTintColor: Colors.primary.darkRed,
+};
+
 const SearchStackNavigation = () => {
   return (
-    <SearchStack.Navigator>
+    <SearchStack.Navigator
+      screenOptions={{
+        ...headerOptions,
+      }}
+    >
       <SearchStack.Screen name="BeverageSearch" component={SearchScreen} />
       <SearchStack.Screen name="Results" component={SearchResultsScreen} />
       <SearchStack.Screen name="BeverageScreen" component={BeverageScreen} />
@@ -61,6 +96,8 @@ const searcher = provideHeadless({
 function App() {
   let [fontsLoaded] = useFonts({
     Sora_400Regular,
+    Sora_600SemiBold,
+    Sora_700Bold,
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -96,9 +133,15 @@ const HomeTabs = () => {
         name="Home"
         component={HomeScreen}
         options={{
+          ...headerOptions,
           tabBarLabel: "Home",
           tabBarLabelStyle: {
-            fontFamily: "Sora_400Regular",
+            // fontFamily: Typography.fontFamily.regular,
+          },
+          tabBarActiveTintColor: Colors.primary.darkRed,
+          tabBarInactiveTintColor: "white",
+          tabBarStyle: {
+            backgroundColor: Colors.primary.orange,
           },
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5Icons name="home" color={color} size={size} />
@@ -109,7 +152,13 @@ const HomeTabs = () => {
         name="Search"
         component={SearchStackNavigation}
         options={{
+          // headerShown: false,
           tabBarLabel: "Search",
+          tabBarActiveTintColor: Colors.primary.darkRed,
+          tabBarInactiveTintColor: "white",
+          tabBarStyle: {
+            backgroundColor: Colors.primary.orange,
+          },
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5Icons name="search" color={color} size={size} />
           ),

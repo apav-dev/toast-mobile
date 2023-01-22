@@ -292,7 +292,6 @@ const styles = StyleSheet.create({
   },
   autocompleteContainer: {
     flex: 1,
-    // backgroundColor: "white",
   },
   autocompleteSection: {
     padding: 8,

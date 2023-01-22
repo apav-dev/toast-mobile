@@ -14,7 +14,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import { SearchStackParamList } from "../App";
+import { Colors, SearchStackParamList } from "../App";
 import { v4 as uuid } from "uuid";
 
 export type SearchResultsScreenRouteProps = StackScreenProps<
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     fontFamily: "Sora_400Regular",
-    color: "orange",
+    // color: Colors.primary.orange,
     paddingTop: 16,
     paddingBottom: 2,
     paddingHorizontal: 16,

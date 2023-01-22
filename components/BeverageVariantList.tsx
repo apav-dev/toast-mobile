@@ -10,8 +10,14 @@ type BeverageVariantListProps = {
 const BeverageVariantList = ({ variants }: BeverageVariantListProps) => {
   return (
     <FlatList
+      style={{
+        maxHeight: 100,
+        flexDirection: "row",
+        backgroundColor: "white",
+        paddingBottom: 8,
+      }}
       contentContainerStyle={{
-        paddingHorizontal: 10,
+        paddingHorizontal: 8,
       }}
       data={variants}
       keyExtractor={(variant) => variant.id}
