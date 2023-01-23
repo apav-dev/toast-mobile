@@ -1,7 +1,7 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
-import { Colors, SearchStackParamList, Typography } from "../App";
+import { SearchStackParamList } from "../App";
 import { useQuery } from "@tanstack/react-query";
 import { getBeverageByName } from "../api/getBeverageByName";
 import Beverage from "../types/kg/beverage";
@@ -10,6 +10,8 @@ import StarRating from "../components/StarRating";
 import DetailsTable from "../components/DetailsTable";
 import Section from "../components/Section";
 import ReviewsSection from "../components/ReviewsSection";
+import Colors from "../styles/colors";
+import Typography from "../styles/typography";
 // import { ScrollView } from "react-native-gesture-handler";
 
 export type SearchResultsScreenRouteProps = StackScreenProps<
@@ -63,7 +65,7 @@ const BeverageScreen = ({
       <Section
         sectionStyles={{
           marginTop: 0,
-          // borderBottomColor: Colors.neutral.s200,
+          borderBottomColor: Colors.neutral.s200,
           borderBottomWidth: 1,
         }}
       >
@@ -80,7 +82,7 @@ const BeverageScreen = ({
                 marginLeft: 10,
                 paddingVertical: 20,
                 fontSize: 20,
-                fontFamily: Typography.fontFamily.semiBold,
+                // fontFamily: Typography.fontFamily.semiBold,
               }}
             >
               {name}
@@ -99,7 +101,7 @@ const BeverageScreen = ({
                     style={{
                       fontFamily: "Sora_400Regular",
                       fontSize: 16,
-                      // color: Colors.neutral.s700,
+                      color: Colors.neutral.s700,
                       paddingRight: 5,
                     }}
                   >
@@ -109,7 +111,7 @@ const BeverageScreen = ({
                     style={{
                       fontFamily: "Sora_400Regular",
                       fontSize: 16,
-                      // color: Colors.neutral.s700,
+                      color: Colors.neutral.s700,
                     }}
                   >
                     {`(${ratingAgg.reviewCount} ratings)`}
@@ -127,7 +129,7 @@ const BeverageScreen = ({
       <Section
         sectionStyles={{
           borderTopWidth: 1,
-          // borderTopColor: Colors.neutral.s200,
+          borderTopColor: Colors.neutral.s200,
         }}
       >
         <DetailsTable
@@ -141,13 +143,11 @@ const BeverageScreen = ({
         <View style={{ paddingVertical: 16 }}>
           <Text
             style={{
-              // fontFamily: Typography.fontFamily.semiBold,
-              fontFamily: "Sora_600SemiBold",
+              fontFamily: Typography.fontFamily.semiBold,
               paddingLeft: 12,
               paddingVertical: 8,
-              // fontSize: Typography.fontSize.x40,
-              fontSize: 19,
-              // color: Colors.neutral.s900,
+              ...Typography.fontSize.x40,
+              color: Colors.neutral.s900,
             }}
           >
             Description
@@ -155,8 +155,8 @@ const BeverageScreen = ({
           <Text
             style={{
               fontFamily: "Sora_400Regular",
-              ...Typography.fontSize.x20,
-              // color: Colors.neutral.s700,
+              // ...Typography.fontSize.x20,
+              color: Colors.neutral.s700,
               padding: 10,
             }}
           >
@@ -164,13 +164,13 @@ const BeverageScreen = ({
           </Text>
         </View>
       </Section>
-      {beverage && (
+      {ratingAgg && (
         <ReviewsSection
           beverageId={beverage.id}
           reviewCount={ratingAgg.reviewCount}
           aggregateRating={Number(
-            ratingAgg?.averageRating || beverage?.c_rating
-          ).toFixed(1)}
+            (ratingAgg?.averageRating || beverage?.c_rating).toFixed(1)
+          )}
         ></ReviewsSection>
       )}
     </ScrollView>
@@ -180,7 +180,7 @@ const BeverageScreen = ({
 const styles = StyleSheet.create({
   container: {
     // height: "100%",
-    // backgroundColor: Colors.neutral.s100,
+    backgroundColor: Colors.neutral.s100,
     overflow: "scroll",
   },
   headingContainer: {

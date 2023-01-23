@@ -1,5 +1,5 @@
 import { View, StyleSheet, ViewStyle } from "react-native";
-import { Colors } from "../App";
+import Colors from "../styles/colors";
 
 type SectionProps = {
   children?: React.ReactNode;
@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 8,
     marginBottom: 8,
-    // backgroundColor: Colors.neutral.white,
+    backgroundColor: Colors.neutral.white,
   },
 });

@@ -12,7 +12,7 @@ type Neutral =
   | "s800"
   | "s900"
   | "black";
-export const neutral: Record<Neutral, string> = {
+const neutral: Record<Neutral, string> = {
   white: "#ffffff",
   s100: "#efeff6",
   s150: "#dfdfe6",
@@ -29,30 +29,30 @@ export const neutral: Record<Neutral, string> = {
 };
 
 type Primary = "orange" | "darkRed";
-export const primary: Record<Primary, string> = {
+const primary: Record<Primary, string> = {
   darkRed: "#A41632",
   orange: "#FFB563",
 };
 
 type Secondary = "brand" | "s200" | "s600";
-export const secondary: Record<Secondary, string> = {
+const secondary: Record<Secondary, string> = {
   s200: "#b968e8",
   brand: "#591282",
   s600: "#3f0d5c",
 };
 
 type Danger = "s400";
-export const danger: Record<Danger, string> = {
+const danger: Record<Danger, string> = {
   s400: "#cf1717",
 };
 
 type Success = "s400";
-export const success: Record<Success, string> = {
+const success: Record<Success, string> = {
   s400: "#008a09",
 };
 
 type Warning = "s400";
-export const warning: Record<Warning, string> = {
+const warning: Record<Warning, string> = {
   s400: "#cf9700",
 };
 
@@ -65,13 +65,13 @@ const applyOpacity = (hexColor: string, opacity: number): string => {
 };
 
 type Transparent = "clear" | "lightGray" | "darkGray";
-export const transparent: Record<Transparent, string> = {
+const transparent: Record<Transparent, string> = {
   clear: "rgba(255, 255, 255, 0)",
   lightGray: applyOpacity(neutral.s300, 0.4),
   darkGray: applyOpacity(neutral.s800, 0.8),
 };
 
-export const shadeColor = (hexColor: string, percent: number): string => {
+const shadeColor = (hexColor: string, percent: number): string => {
   const redGamut: number = parseInt(hexColor.slice(1, 3), 16);
   const greenGamut: number = parseInt(hexColor.slice(3, 5), 16);
   const blueGamut: number = parseInt(hexColor.slice(5, 7), 16);
@@ -95,3 +95,16 @@ export const shadeColor = (hexColor: string, percent: number): string => {
 
   return `#${hexString}`;
 };
+
+const Colors = {
+  neutral,
+  primary,
+  secondary,
+  danger,
+  success,
+  warning,
+  transparent,
+  shadeColor,
+};
+
+export default Colors;

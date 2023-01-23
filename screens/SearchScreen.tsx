@@ -11,7 +11,7 @@ import Ce_beverage from "../types/search/beverages";
 import { renderHighlightedValue } from "../components/utils/renderHighlightedValue";
 import { v4 as uuid } from "uuid";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Colors, SearchStackParamList } from "../App";
+import { SearchStackParamList } from "../App";
 
 type SearchScreenNavigationProps = StackScreenProps<
   SearchStackParamList,

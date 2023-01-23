@@ -1,26 +1,37 @@
 import { CONTENT_API_KEY } from "@env";
-import ContentApiResponse from "../types/kg/content_api";
-import Review, { ReviewApiResponse } from "../types/kg/review";
+import { ReviewApiResponse } from "../types/kg/review";
 
 export const fetchReviews = async (
   id: string,
-  rating: number
+  limit = 10,
+  params?: Record<string, string | number>,
+  pageToken?: string
 ): Promise<ReviewApiResponse> => {
+  let requestString = `https://streams.yext.com/v2/accounts/me/api/fetchReviews?api_key=${CONTENT_API_KEY}&v=20221114&entity.id=${id}`;
+  if (pageToken) {
+    requestString += `&pageToken=${pageToken}`;
+  }
+  if (limit) {
+    requestString += `&limit=${limit}`;
+  }
+  if (params) {
+    Object.keys(params).forEach((key) => {
+      requestString += `&${key}=${params[key]}`;
+    });
+  }
   try {
-    const response = await fetch(
-      `https://streams.yext.com/v2/accounts/me/api/fetchReviews?api_key=75fcb4c0fdec8f3c001872acb958a7ba&v=20221114&entity.id=${id}&rating=${rating}`
-    );
+    const response = await fetch(requestString);
     const data = await response.json();
 
     if (data.meta.errors.length > 0) {
       throw new Error(data.meta.errors[0].message);
     }
 
-    return { ...data, rating };
+    return data;
   } catch (error) {
     console.error(error);
     return Promise.reject(
-      new Error(`"Failed to get reviews for rating ${rating}: ${error}`)
+      new Error(`"Failed to get reviews for beverage ${id}: ${error}`)
     );
   }
 };

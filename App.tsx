@@ -24,10 +24,9 @@ import SearchResultsScreen from "./screens/SearchResultsScreen";
 import BeverageScreen from "./screens/BeverageScreen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Text } from "react-native";
-import * as Colors from "./styles/colors";
-import * as Typography from "./styles/typography";
-
-export { Colors, Typography };
+import Colors from "./styles/colors";
+import Typography from "./styles/typography";
+// import * as Typography from "./styles/typography";
 
 // dotenv.config()
 
@@ -52,15 +51,14 @@ const SearchStack = createStackNavigator<SearchStackParamList>();
 const headerOptions = {
   headerShown: true,
   headerStyle: {
-    // backgroundColor: Colors.primary.orange,
+    backgroundColor: Colors.primary.orange,
   },
   headerTitle(props) {
     return (
       <Text
         style={{
-          // color: Colors.primary.darkRed,
-          // fontFamily: Typography.fontFamily.semiBold,
-          fontFamily: "Sora_600SemiBold",
+          color: Colors.primary.darkRed,
+          fontFamily: Typography.fontFamily.semiBold,
           fontSize: 24,
         }}
       >
@@ -69,7 +67,7 @@ const headerOptions = {
     );
   },
   headerBackTitleVisible: false,
-  // headerTintColor: Colors.primary.darkRed,
+  headerTintColor: Colors.primary.darkRed,
 };
 
 const SearchStackNavigation = () => {
@@ -136,12 +134,12 @@ const HomeTabs = () => {
           ...headerOptions,
           tabBarLabel: "Home",
           tabBarLabelStyle: {
-            // fontFamily: Typography.fontFamily.regular,
+            fontFamily: Typography.fontFamily.regular,
           },
-          // tabBarActiveTintColor: Colors.primary.darkRed,
+          tabBarActiveTintColor: Colors.primary.darkRed,
           tabBarInactiveTintColor: "white",
           tabBarStyle: {
-            // backgroundColor: Colors.primary.orange,
+            backgroundColor: Colors.primary.orange,
           },
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5Icons name="home" color={color} size={size} />
@@ -154,10 +152,10 @@ const HomeTabs = () => {
         options={{
           // headerShown: false,
           tabBarLabel: "Search",
-          // tabBarActiveTintColor: Colors.primary.darkRed,
+          tabBarActiveTintColor: Colors.primary.darkRed,
           tabBarInactiveTintColor: "white",
           tabBarStyle: {
-            // backgroundColor: Colors.primary.orange,
+            backgroundColor: Colors.primary.orange,
           },
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5Icons name="search" color={color} size={size} />

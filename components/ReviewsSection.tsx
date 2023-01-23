@@ -1,14 +1,14 @@
 import Section from "./Section";
 import { Text, StyleSheet, View } from "react-native";
-import { Colors, Typography } from "../App";
 import StarRating from "./StarRating";
 import ReviewBar from "./ReviewBar";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReviewComponent from "./Review";
 import { useQueries } from "@tanstack/react-query";
 import { fetchReviews } from "../api/fetchReviews";
-import ContentApiResponse from "../types/kg/content_api";
-import Review from "../types/kg/review";
+import Colors from "../styles/colors";
+import Typography from "../styles/typography";
+import Reviews from "./Reviews";
 
 type ReviewsSectionProps = {
   beverageId: string;
@@ -24,8 +24,8 @@ const ReviewsSection = ({
   // TODO: are these returned in order?
   const reviewResults = useQueries({
     queries: [5, 4, 3, 2, 1].map((score) => ({
-      queryKey: ["reviews", beverageId, score],
-      queryFn: () => fetchReviews(beverageId, score),
+      queryKey: ["reviewScore", beverageId, score],
+      queryFn: () => fetchReviews(beverageId, 1, { rating: score }),
       staleTime: Infinity,
     })),
   });
@@ -61,27 +61,18 @@ const ReviewsSection = ({
           })}
         </View>
       </View>
-      <View>
-        <ReviewComponent
-          authorName={"Cheryl"}
-          content={"Always excellent"}
-          rating={5}
-          reviewDate={"Jan 02, 2023"}
-        />
-      </View>
+      <Reviews beverageId={beverageId} reviewCount={reviewCount} />
     </Section>
   );
 };
 
 const styles = StyleSheet.create({
   headingText: {
-    // fontFamily: Typography.fontFamily.semiBold,
-    fontFamily: "Sora_600SemiBold",
+    fontFamily: Typography.fontFamily.semiBold,
     paddingLeft: 12,
     paddingVertical: 8,
-    // fontSize: Typography.fontSize.x40,
-    fontSize: 19,
-    // color: Colors.neutral.s900,
+    ...Typography.fontSize.x40,
+    color: Colors.neutral.s900,
   },
   reviewsContainer: {
     paddingVertical: 16,

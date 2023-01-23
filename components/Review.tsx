@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import { Colors } from "../App";
+import Colors from "../styles/colors";
 import StarRating from "./StarRating";
 
 type ReviewProps = {
@@ -42,17 +42,17 @@ const styles = StyleSheet.create({
   authorNameText: {
     fontFamily: "Sora_600SemiBold",
     fontSize: 16,
-    // color: Colors.neutral.s900,
+    color: Colors.neutral.s900,
   },
   reviewDateText: {
     fontFamily: "Sora_400Regular",
     fontSize: 13,
-    // color: Colors.neutral.s500,
+    color: Colors.neutral.s500,
   },
   reviewContentText: {
     fontFamily: "Sora_400Regular",
     fontSize: 14,
-    // color: Colors.neutral.s700,
+    color: Colors.neutral.s700,
     paddingTop: 16,
   },
 });

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Colors } from "../App";
+import Colors from "../styles/colors";
 
 type ReviewBarProps = {
   score: number;
@@ -21,7 +21,9 @@ const ReviewBar = ({
       <View style={styles.barContainer}>
         <View style={[styles.bar, barWidth]} />
       </View>
-      <Text style={styles.reviewCount}>{totalReviews}</Text>
+      <View style={styles.reviewCountContainer}>
+        <Text style={styles.reviewCount}>{totalReviews}</Text>
+      </View>
     </View>
   );
 };
@@ -52,6 +54,9 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
     backgroundColor: Colors.primary.orange,
+  },
+  reviewCountContainer: {
+    width: 46,
   },
   reviewCount: {
     marginLeft: 10,

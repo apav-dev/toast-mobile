@@ -1,5 +1,5 @@
 import { FontAwesome } from "react-native-vector-icons";
-import { Colors } from "./../../App";
+import Colors from "../../styles/colors";
 
 type StarIconProps = {
   size?: number;
@@ -11,7 +11,7 @@ function StarIcon(props: StarIconProps) {
     <FontAwesome
       name="star"
       size={props.size || 30}
-      // color={props.color || Colors.primary.orange}
+      color={props.color || Colors.primary.orange}
     />
   );
 }

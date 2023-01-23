@@ -7,16 +7,16 @@ import StarIcon from "./icons/StarIcon";
 interface StarRatingProps {
   rating: number;
   starSize?: number;
-  starColor?: string;
+  color?: string;
 }
 
-const StarRating = ({ rating, starSize, starColor }: StarRatingProps) => {
+const StarRating = ({ rating, starSize, color }: StarRatingProps) => {
   return (
     <View style={{ flexDirection: "row" }}>
       {[...Array(Math.floor(rating))].map((_) => (
-        <StarIcon key={uuid()} size={starSize} color={starColor} />
+        <StarIcon key={uuid()} size={starSize} color={color} />
       ))}
-      {rating % 1 >= 0.5 && <HalfStarIcon size={starSize} color={starColor} />}
+      {rating % 1 >= 0.5 && <HalfStarIcon size={starSize} color={color} />}
     </View>
   );
 };
