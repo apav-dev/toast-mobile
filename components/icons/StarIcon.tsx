@@ -11,7 +11,7 @@ function StarIcon(props: StarIconProps) {
     <FontAwesome
       name="star"
       size={props.size || 30}
-      color={props.color || Colors.primary.orange}
+      // color={props.color || Colors.primary.orange}
     />
   );
 }

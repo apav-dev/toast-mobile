@@ -11,7 +11,7 @@ function HalfStarIcon(props: HalfStarIconProps) {
     <FontAwesome
       name="star-half"
       size={props.size || 30}
-      color={props.color || Colors.primary.orange}
+      // color={props.color || Colors.primary.orange}
     />
   );
 }

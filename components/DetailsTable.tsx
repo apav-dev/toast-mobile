@@ -19,10 +19,12 @@ const DetailsTable = ({ data, title }: DetailsTableProps) => {
             }}
           >
             <Text
-              style={{
-                color: Colors.neutral.s300,
-                fontFamily: Typography.fontFamily.regular,
-              }}
+              style={
+                {
+                  // color: Colors.neutral.s300,
+                  // fontFamily: Typography.fontFamily.regular,
+                }
+              }
             >
               {row[0].toLocaleUpperCase()}
             </Text>
@@ -34,10 +36,12 @@ const DetailsTable = ({ data, title }: DetailsTableProps) => {
             }}
           >
             <Text
-              style={{
-                fontFamily: Typography.fontFamily.regular,
-                color: Colors.neutral.s700,
-              }}
+              style={
+                {
+                  // fontFamily: Typography.fontFamily.regular,
+                  // color: Colors.neutral.s700,
+                }
+              }
             >
               {row[1]}
             </Text>
@@ -52,19 +56,19 @@ export default DetailsTable;
 
 const styles = StyleSheet.create({
   headingText: {
-    fontFamily: Typography.fontFamily.semiBold,
+    // fontFamily: Typography.fontFamily.semiBold,
     paddingLeft: 12,
     paddingVertical: 8,
     // fontSize: Typography.fontSize.x40,
     fontSize: 19,
-    color: Colors.neutral.s900,
+    // color: Colors.neutral.s900,
   },
   labelContainer: {
     width: "30%",
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: Colors.neutral.s200,
-    backgroundColor: Colors.neutral.s100,
+    // borderColor: Colors.neutral.s200,
+    // backgroundColor: Colors.neutral.s100,
     paddingLeft: 12,
     paddingVertical: 4,
   },
@@ -73,7 +77,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: Colors.neutral.s200,
+    // borderColor: Colors.neutral.s200,
     paddingLeft: 12,
     padding: 4,
   },

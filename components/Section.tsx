@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 8,
     marginBottom: 8,
-    backgroundColor: Colors.neutral.white,
+    // backgroundColor: Colors.neutral.white,
   },
 });

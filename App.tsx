@@ -52,7 +52,7 @@ const SearchStack = createStackNavigator<SearchStackParamList>();
 const headerOptions = {
   headerShown: true,
   headerStyle: {
-    backgroundColor: Colors.primary.orange,
+    // backgroundColor: Colors.primary.orange,
   },
   headerTitle(props) {
     return (
@@ -69,7 +69,7 @@ const headerOptions = {
     );
   },
   headerBackTitleVisible: false,
-  headerTintColor: Colors.primary.darkRed,
+  // headerTintColor: Colors.primary.darkRed,
 };
 
 const SearchStackNavigation = () => {
@@ -138,10 +138,10 @@ const HomeTabs = () => {
           tabBarLabelStyle: {
             // fontFamily: Typography.fontFamily.regular,
           },
-          tabBarActiveTintColor: Colors.primary.darkRed,
+          // tabBarActiveTintColor: Colors.primary.darkRed,
           tabBarInactiveTintColor: "white",
           tabBarStyle: {
-            backgroundColor: Colors.primary.orange,
+            // backgroundColor: Colors.primary.orange,
           },
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5Icons name="home" color={color} size={size} />
@@ -154,10 +154,10 @@ const HomeTabs = () => {
         options={{
           // headerShown: false,
           tabBarLabel: "Search",
-          tabBarActiveTintColor: Colors.primary.darkRed,
+          // tabBarActiveTintColor: Colors.primary.darkRed,
           tabBarInactiveTintColor: "white",
           tabBarStyle: {
-            backgroundColor: Colors.primary.orange,
+            // backgroundColor: Colors.primary.orange,
           },
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5Icons name="search" color={color} size={size} />

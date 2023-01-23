@@ -63,7 +63,7 @@ const BeverageScreen = ({
       <Section
         sectionStyles={{
           marginTop: 0,
-          borderBottomColor: Colors.neutral.s200,
+          // borderBottomColor: Colors.neutral.s200,
           borderBottomWidth: 1,
         }}
       >
@@ -99,7 +99,7 @@ const BeverageScreen = ({
                     style={{
                       fontFamily: "Sora_400Regular",
                       fontSize: 16,
-                      color: Colors.neutral.s700,
+                      // color: Colors.neutral.s700,
                       paddingRight: 5,
                     }}
                   >
@@ -109,7 +109,7 @@ const BeverageScreen = ({
                     style={{
                       fontFamily: "Sora_400Regular",
                       fontSize: 16,
-                      color: Colors.neutral.s700,
+                      // color: Colors.neutral.s700,
                     }}
                   >
                     {`(${ratingAgg.reviewCount} ratings)`}
@@ -127,7 +127,7 @@ const BeverageScreen = ({
       <Section
         sectionStyles={{
           borderTopWidth: 1,
-          borderTopColor: Colors.neutral.s200,
+          // borderTopColor: Colors.neutral.s200,
         }}
       >
         <DetailsTable
@@ -147,7 +147,7 @@ const BeverageScreen = ({
               paddingVertical: 8,
               // fontSize: Typography.fontSize.x40,
               fontSize: 19,
-              color: Colors.neutral.s900,
+              // color: Colors.neutral.s900,
             }}
           >
             Description
@@ -156,7 +156,7 @@ const BeverageScreen = ({
             style={{
               fontFamily: "Sora_400Regular",
               ...Typography.fontSize.x20,
-              color: Colors.neutral.s700,
+              // color: Colors.neutral.s700,
               padding: 10,
             }}
           >
@@ -164,7 +164,15 @@ const BeverageScreen = ({
           </Text>
         </View>
       </Section>
-      <ReviewsSection></ReviewsSection>
+      {beverage && (
+        <ReviewsSection
+          beverageId={beverage.id}
+          reviewCount={ratingAgg.reviewCount}
+          aggregateRating={Number(
+            ratingAgg?.averageRating || beverage?.c_rating
+          ).toFixed(1)}
+        ></ReviewsSection>
+      )}
     </ScrollView>
   );
 };
@@ -172,7 +180,7 @@ const BeverageScreen = ({
 const styles = StyleSheet.create({
   container: {
     // height: "100%",
-    backgroundColor: Colors.neutral.s100,
+    // backgroundColor: Colors.neutral.s100,
     overflow: "scroll",
   },
   headingContainer: {

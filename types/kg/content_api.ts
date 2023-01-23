@@ -7,6 +7,8 @@ type ContentApiResponse<T> = {
     docs: T[];
     count: number;
   };
+  count: number;
+  nextPageToken?: string;
 };
 
 export default ContentApiResponse;
