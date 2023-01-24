@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import Colors from "../styles/colors";
+import Typography from "../styles/typography";
 
 type DetailsTableProps = {
   title?: string;
@@ -52,11 +53,10 @@ export default DetailsTable;
 
 const styles = StyleSheet.create({
   headingText: {
-    // fontFamily: Typography.fontFamily.semiBold,
+    fontFamily: Typography.fontFamily.semiBold,
     paddingLeft: 12,
     paddingVertical: 8,
-    // fontSize: Typography.fontSize.x40,
-    fontSize: 19,
+    ...Typography.fontSize.x40,
     color: Colors.neutral.s900,
   },
   labelContainer: {

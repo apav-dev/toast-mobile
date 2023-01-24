@@ -1,5 +1,5 @@
 import { FontAwesome } from "react-native-vector-icons";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import Colors from "../../styles/colors";
 
 type HalfStarIconProps = {
   size?: number;

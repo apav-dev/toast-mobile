@@ -1,13 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { fetchReviews } from "../api/fetchReviews";
 import Colors from "../styles/colors";
 import Typography from "../styles/typography";
 import ReviewComponent from "./Review";
 import { v4 as uuid } from "uuid";
+import FilterIcon from "./icons/FilterIcon";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import SortModal from "./SortModal";
 
-const reviewSortConfig = [
+export type SortOption = {
+  label: string;
+  sort: {
+    key: string;
+    value: string;
+  };
+};
+
+const sortOptions: SortOption[] = [
   {
     label: "Newest",
     sort: {
@@ -44,18 +55,26 @@ type ReviewsProps = {
 };
 
 const Reviews = ({ reviewCount, beverageId }: ReviewsProps) => {
-  const [activeSort, setActiveSort] = React.useState(reviewSortConfig[0]);
+  const [activeSort, setActiveSort] = useState<SortOption>(sortOptions[0]);
+  const [sortModalVisible, setSortModalVisible] = useState(false);
+
+  // useEffect(() => {
+  //   if (activeSort) {
+  //     console.log("refetching", activeSort);
+  //     reviewsResponse.refetch();
+  //   }
+  // }, [activeSort]);
 
   const reviewsResponse = useQuery({
-    queryKey: ["reviews", beverageId],
+    queryKey: ["reviews", activeSort.label],
     queryFn: () =>
       fetchReviews(beverageId, 5, {
         [activeSort.sort.key]: activeSort.sort.value,
       }),
     staleTime: Infinity,
+    enabled: activeSort !== null,
   });
 
-  // format utc date in the format of Jan 1, 2021
   const formatDate = (date: string) => {
     const dateObj = new Date(date);
     return dateObj.toLocaleDateString("en-US", {
@@ -65,26 +84,50 @@ const Reviews = ({ reviewCount, beverageId }: ReviewsProps) => {
     });
   };
 
+  const handleOptionSelected = (option?: SortOption) => {
+    if (option) {
+      setActiveSort(option);
+    }
+    setSortModalVisible(false);
+  };
+
   return (
-    <View>
-      <View style={styles.headingContainer}>
-        <Text style={styles.heading}>{`Reviews (${reviewCount})`}</Text>
-        <Text style={styles.heading}>Sort By:</Text>
+    <>
+      <View>
+        <View style={styles.headingContainer}>
+          <Text style={styles.heading}>{`Reviews (${reviewCount})`}</Text>
+          <TouchableOpacity onPress={() => setSortModalVisible(true)}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text
+                style={{ ...styles.heading, paddingRight: 2 }}
+              >{`Sort By: ${activeSort?.label}`}</Text>
+              <FilterIcon color={Colors.neutral.s500} size={16} />
+            </View>
+          </TouchableOpacity>
+        </View>
+        {reviewsResponse.isLoading ? (
+          <Text>Loading...</Text>
+        ) : (
+          reviewsResponse.data.response.docs.map((review) => (
+            <ReviewComponent
+              key={uuid()}
+              authorName={review.authorName}
+              content={review.content}
+              rating={review.rating}
+              reviewDate={formatDate(review.reviewDate)}
+            />
+          ))
+        )}
       </View>
-      {reviewsResponse.isLoading ? (
-        <Text>Loading...</Text>
-      ) : (
-        reviewsResponse.data.response.docs.map((review) => (
-          <ReviewComponent
-            key={uuid()}
-            authorName={review.authorName}
-            content={review.content}
-            rating={review.rating}
-            reviewDate={formatDate(review.reviewDate)}
-          />
-        ))
+      {activeSort && (
+        <SortModal
+          options={sortOptions}
+          selectedOption={activeSort}
+          onOptionSelected={handleOptionSelected}
+          visible={sortModalVisible}
+        />
       )}
-    </View>
+    </>
   );
 };
 
