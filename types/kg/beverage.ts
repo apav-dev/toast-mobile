@@ -1,4 +1,4 @@
-import { ComplexImage } from "../search/beverages";
+import { ComplexImageType, ThumbnailType } from "./image";
 
 export type BeverageVariant = {
   c_containerType?: string;
@@ -6,7 +6,7 @@ export type BeverageVariant = {
   id?: string;
   name?: string;
   primaryPhoto?: {
-    image?: ComplexImage;
+    image?: ThumbnailType;
   };
   size?: string;
 };
@@ -31,7 +31,7 @@ type Beverage = {
   id: string;
   name: string;
   primaryPhoto?: {
-    image?: ComplexImage;
+    image?: ThumbnailType;
   };
   ref_reviewsAgg?: Array<{
     averageRating?: number;

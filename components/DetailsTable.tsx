@@ -22,7 +22,7 @@ const DetailsTable = ({ data, title }: DetailsTableProps) => {
             <Text
               style={{
                 color: Colors.neutral.s300,
-                // fontFamily: Typography.fontFamily.regular,
+                fontFamily: Typography.fontFamily.regular,
               }}
             >
               {row[0].toLocaleUpperCase()}
@@ -36,7 +36,7 @@ const DetailsTable = ({ data, title }: DetailsTableProps) => {
           >
             <Text
               style={{
-                // fontFamily: Typography.fontFamily.regular,
+                fontFamily: Typography.fontFamily.regular,
                 color: Colors.neutral.s700,
               }}
             >

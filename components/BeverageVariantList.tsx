@@ -5,9 +5,13 @@ import { BeverageVariant as BV } from "../types/kg/beverage";
 
 type BeverageVariantListProps = {
   variants: BV[];
+  onVariantPress?: (variant: BV) => void;
 };
 
-const BeverageVariantList = ({ variants }: BeverageVariantListProps) => {
+const BeverageVariantList = ({
+  variants,
+  onVariantPress,
+}: BeverageVariantListProps) => {
   return (
     <FlatList
       style={{
@@ -19,9 +23,17 @@ const BeverageVariantList = ({ variants }: BeverageVariantListProps) => {
       contentContainerStyle={{
         paddingHorizontal: 8,
       }}
-      data={variants}
+      data={variants.sort((a, b) => {
+        if (a.c_containerType === b.c_containerType) {
+          return Number(a.c_price) - Number(b.c_price);
+        } else {
+          return a.c_containerType === "Can" ? -1 : 1;
+        }
+      })}
       keyExtractor={(variant) => variant.id}
-      renderItem={({ item }) => <BeverageVariant variant={item} />}
+      renderItem={({ item }) => (
+        <BeverageVariant variant={item} onVariantPress={onVariantPress} />
+      )}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
     />

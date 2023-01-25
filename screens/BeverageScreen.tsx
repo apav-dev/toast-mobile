@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import { SearchStackParamList } from "../App";
 import { useQuery } from "@tanstack/react-query";
 import { getBeverageByName } from "../api/getBeverageByName";
-import Beverage from "../types/kg/beverage";
+import Beverage, { BeverageVariant } from "../types/kg/beverage";
 import BeverageVariantList from "../components/BeverageVariantList";
 import StarRating from "../components/StarRating";
 import DetailsTable from "../components/DetailsTable";
@@ -60,6 +60,13 @@ const BeverageScreen = ({
     }
   }, [data]);
 
+  const handleVariantPress = (variant: BeverageVariant) => {
+    if (variant.primaryPhoto) {
+      setImageSource(variant.primaryPhoto.image.url);
+    }
+  };
+
+  // TODO: Add loading state
   return (
     <ScrollView style={styles.container}>
       <Section
@@ -78,11 +85,10 @@ const BeverageScreen = ({
           <View style={{ flex: 1 }}>
             <Text
               style={{
-                // fontWeight: "bold",
                 marginLeft: 10,
                 paddingVertical: 20,
                 fontSize: 20,
-                // fontFamily: Typography.fontFamily.semiBold,
+                fontFamily: Typography.fontFamily.semiBold,
               }}
             >
               {name}
@@ -122,7 +128,10 @@ const BeverageScreen = ({
           </View>
         </View>
         {beverage?.c_variantBeverages && (
-          <BeverageVariantList variants={beverage.c_variantBeverages} />
+          <BeverageVariantList
+            variants={beverage.c_variantBeverages}
+            onVariantPress={handleVariantPress}
+          />
         )}
       </Section>
 
@@ -135,9 +144,21 @@ const BeverageScreen = ({
         <DetailsTable
           title="Details"
           data={[
-            ["Category", "Ale"],
-            ["Origin", "France"],
-            ["ABV", "5.0%"],
+            [
+              // the category isn't guaranteed to be correct as it depends on the Knowledge Graph
+              "Category",
+              beverage?.c_beverageCategories[
+                beverage.c_beverageCategories.length - 1
+              ].name,
+            ],
+            // TODO: add state to origin if it exists
+            ["Origin", beverage?.c_originCountry],
+            [
+              "ABV",
+              Number(beverage?.c_abv) % 1 === 0
+                ? beverage?.c_abv + ".0%"
+                : beverage?.c_abv + "%",
+            ],
           ]}
         />
         <View style={{ paddingVertical: 16 }}>
@@ -154,8 +175,8 @@ const BeverageScreen = ({
           </Text>
           <Text
             style={{
-              fontFamily: "Sora_400Regular",
-              // ...Typography.fontSize.x20,
+              fontFamily: Typography.fontFamily.regular,
+              ...Typography.fontSize.x20,
               color: Colors.neutral.s700,
               padding: 10,
             }}
@@ -179,13 +200,13 @@ const BeverageScreen = ({
 
 const styles = StyleSheet.create({
   container: {
-    // height: "100%",
     backgroundColor: Colors.neutral.s100,
     overflow: "scroll",
   },
   headingContainer: {
     flexDirection: "row",
     paddingHorizontal: 10,
+    marginVertical: 10,
   },
 });
 
