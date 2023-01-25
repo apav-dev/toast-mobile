@@ -3,12 +3,11 @@ import { Text, StyleSheet, View } from "react-native";
 import StarRating from "./StarRating";
 import ReviewBar from "./ReviewBar";
 import React from "react";
-import ReviewComponent from "./Review";
 import { useQueries } from "@tanstack/react-query";
 import { fetchReviews } from "../api/fetchReviews";
-import Colors from "../styles/colors";
 import Typography from "../styles/typography";
 import Reviews from "./Reviews";
+import SectionTitle from "./SectionTitle";
 
 type ReviewsSectionProps = {
   beverageId: string;
@@ -32,7 +31,7 @@ const ReviewsSection = ({
 
   return (
     <Section>
-      <Text style={styles.headingText}>Reviews</Text>
+      <SectionTitle title="Reviews" />
       <View style={styles.reviewsContainer}>
         <View style={styles.overallRatingContainer}>
           {aggregateRating && <StarRating rating={aggregateRating} />}
@@ -67,13 +66,6 @@ const ReviewsSection = ({
 };
 
 const styles = StyleSheet.create({
-  headingText: {
-    fontFamily: Typography.fontFamily.semiBold,
-    paddingLeft: 12,
-    paddingVertical: 8,
-    ...Typography.fontSize.x40,
-    color: Colors.neutral.s900,
-  },
   reviewsContainer: {
     paddingVertical: 16,
     paddingHorizontal: 12,

@@ -28,10 +28,11 @@ const neutral: Record<Neutral, string> = {
   black: "#000000",
 };
 
-type Primary = "orange" | "darkRed";
+type Primary = "orange" | "darkRed" | "lightOrange";
 const primary: Record<Primary, string> = {
   darkRed: "#A41632",
   orange: "#FFB563",
+  lightOrange: "#FFEEDB",
 };
 
 type Secondary = "brand" | "s200" | "s600";

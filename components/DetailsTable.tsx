@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import Colors from "../styles/colors";
 import Typography from "../styles/typography";
+import SectionTitle from "./SectionTitle";
 
 type DetailsTableProps = {
   title?: string;
@@ -10,7 +11,7 @@ type DetailsTableProps = {
 const DetailsTable = ({ data, title }: DetailsTableProps) => {
   return (
     <>
-      <Text style={styles.headingText}>{title}</Text>
+      <SectionTitle title={title} />
       {data.map((row, index) => (
         <View key={index} style={{ flexDirection: "row" }}>
           <View
@@ -52,13 +53,6 @@ const DetailsTable = ({ data, title }: DetailsTableProps) => {
 export default DetailsTable;
 
 const styles = StyleSheet.create({
-  headingText: {
-    fontFamily: Typography.fontFamily.semiBold,
-    paddingLeft: 12,
-    paddingVertical: 8,
-    ...Typography.fontSize.x40,
-    color: Colors.neutral.s900,
-  },
   labelContainer: {
     width: "30%",
     borderTopWidth: 1,

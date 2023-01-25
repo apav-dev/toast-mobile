@@ -1,4 +1,7 @@
-import { AutocompleteResult } from "@yext/search-headless-react";
+import {
+  AutocompleteResult,
+  useSearchActions,
+} from "@yext/search-headless-react";
 import {
   View,
   StyleSheet,
@@ -12,13 +15,22 @@ import { renderHighlightedValue } from "../components/utils/renderHighlightedVal
 import { v4 as uuid } from "uuid";
 import { StackScreenProps } from "@react-navigation/stack";
 import { SearchStackParamList } from "../App";
+import { useEffect } from "react";
 
 type SearchScreenNavigationProps = StackScreenProps<
   SearchStackParamList,
-  "Results"
+  "BeverageSearch"
 >;
 
-const SearchScreen = ({ navigation }: SearchScreenNavigationProps) => {
+const SearchScreen = ({ navigation, route }: SearchScreenNavigationProps) => {
+  const { verticalKey } = route.params;
+
+  const searchActions = useSearchActions();
+
+  useEffect(() => {
+    searchActions.setVertical(verticalKey);
+  }, [verticalKey]);
+
   const handleEntityPress = (result: AutocompleteResult) => {
     if (result.key === "c_beverageCategories.name") {
       navigation.navigate("Results", {

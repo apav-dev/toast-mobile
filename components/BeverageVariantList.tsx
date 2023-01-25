@@ -5,11 +5,13 @@ import { BeverageVariant as BV } from "../types/kg/beverage";
 
 type BeverageVariantListProps = {
   variants: BV[];
+  selectedVariantId?: string;
   onVariantPress?: (variant: BV) => void;
 };
 
 const BeverageVariantList = ({
   variants,
+  selectedVariantId,
   onVariantPress,
 }: BeverageVariantListProps) => {
   return (
@@ -32,7 +34,11 @@ const BeverageVariantList = ({
       })}
       keyExtractor={(variant) => variant.id}
       renderItem={({ item }) => (
-        <BeverageVariant variant={item} onVariantPress={onVariantPress} />
+        <BeverageVariant
+          variant={item}
+          selectedVariantId={selectedVariantId}
+          onVariantPress={onVariantPress}
+        />
       )}
       horizontal={true}
       showsHorizontalScrollIndicator={false}

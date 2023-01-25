@@ -36,7 +36,8 @@
     "remote-redux-devtools": "^0.5.16",
     "twrnc": "^3.5.0",
     "typescript": "^4.6.3",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "expo-location": "~15.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

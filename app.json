@@ -14,11 +14,13 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Toast needs to access your location to find nearby stores.",
+        "NSLocationUsage": "Toast needs to access your location to find nearby stores."
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -9,6 +9,7 @@ import { v4 as uuid } from "uuid";
 import FilterIcon from "./icons/FilterIcon";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import SortModal from "./SortModal";
+import Divider from "./Divider";
 
 export type SortOption = {
   label: string;
@@ -58,13 +59,6 @@ const Reviews = ({ reviewCount, beverageId }: ReviewsProps) => {
   const [activeSort, setActiveSort] = useState<SortOption>(sortOptions[0]);
   const [sortModalVisible, setSortModalVisible] = useState(false);
 
-  // useEffect(() => {
-  //   if (activeSort) {
-  //     console.log("refetching", activeSort);
-  //     reviewsResponse.refetch();
-  //   }
-  // }, [activeSort]);
-
   const reviewsResponse = useQuery({
     queryKey: ["reviews", activeSort.label],
     queryFn: () =>
@@ -108,14 +102,19 @@ const Reviews = ({ reviewCount, beverageId }: ReviewsProps) => {
         {reviewsResponse.isLoading ? (
           <Text>Loading...</Text>
         ) : (
-          reviewsResponse.data.response.docs.map((review) => (
-            <ReviewComponent
-              key={uuid()}
-              authorName={review.authorName}
-              content={review.content}
-              rating={review.rating}
-              reviewDate={formatDate(review.reviewDate)}
-            />
+          reviewsResponse.data.response.docs.map((review, index) => (
+            <>
+              <ReviewComponent
+                key={uuid()}
+                authorName={review.authorName}
+                content={review.content}
+                rating={review.rating}
+                reviewDate={formatDate(review.reviewDate)}
+              />
+              {index !== reviewsResponse.data.response.docs.length - 1 && (
+                <Divider />
+              )}
+            </>
           ))
         )}
       </View>

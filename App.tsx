@@ -26,7 +26,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Text } from "react-native";
 import Colors from "./styles/colors";
 import Typography from "./styles/typography";
-// import * as Typography from "./styles/typography";
 
 // dotenv.config()
 
@@ -35,7 +34,9 @@ import Typography from "./styles/typography";
 const queryClient = new QueryClient();
 
 export type SearchStackParamList = {
-  BeverageSearch: undefined;
+  BeverageSearch: {
+    verticalKey?: string;
+  };
   Results: {
     query?: string;
     beverageTypeName?: string;
@@ -77,7 +78,11 @@ const SearchStackNavigation = () => {
         ...headerOptions,
       }}
     >
-      <SearchStack.Screen name="BeverageSearch" component={SearchScreen} />
+      <SearchStack.Screen
+        name="BeverageSearch"
+        component={SearchScreen}
+        initialParams={{ verticalKey: "beverages" }}
+      />
       <SearchStack.Screen name="Results" component={SearchResultsScreen} />
       <SearchStack.Screen name="BeverageScreen" component={BeverageScreen} />
     </SearchStack.Navigator>
