@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View } from "react-native";
-import { v4 as uuid } from "uuid";
+import { uuid } from "../utils/uuid";
 import HalfStarIcon from "./icons/HalfStarIcon";
 import StarIcon from "./icons/StarIcon";
 

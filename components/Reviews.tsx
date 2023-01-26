@@ -5,11 +5,11 @@ import { fetchReviews } from "../api/fetchReviews";
 import Colors from "../styles/colors";
 import Typography from "../styles/typography";
 import ReviewComponent from "./Review";
-import { v4 as uuid } from "uuid";
 import FilterIcon from "./icons/FilterIcon";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import SortModal from "./SortModal";
 import Divider from "./Divider";
+import { uuid } from "../utils/uuid";
 
 export type SortOption = {
   label: string;
@@ -103,9 +103,8 @@ const Reviews = ({ reviewCount, beverageId }: ReviewsProps) => {
           <Text>Loading...</Text>
         ) : (
           reviewsResponse.data.response.docs.map((review, index) => (
-            <>
+            <View key={uuid()}>
               <ReviewComponent
-                key={uuid()}
                 authorName={review.authorName}
                 content={review.content}
                 rating={review.rating}
@@ -114,7 +113,7 @@ const Reviews = ({ reviewCount, beverageId }: ReviewsProps) => {
               {index !== reviewsResponse.data.response.docs.length - 1 && (
                 <Divider />
               )}
-            </>
+            </View>
           ))
         )}
       </View>

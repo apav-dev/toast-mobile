@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList } from "react-native";
 import BeverageVariant from "./BeverageVariant";
 import { BeverageVariant as BV } from "../types/kg/beverage";
-import { v4 as uuid } from "uuid";
+import { uuid } from "../utils/uuid";
 
 type BeverageVariantListProps = {
   variants: BV[];
@@ -33,7 +33,7 @@ const BeverageVariantList = ({
           return a.c_containerType === "Can" ? -1 : 1;
         }
       })}
-      keyExtractor={() => uuid()}
+      keyExtractor={(item) => uuid()}
       renderItem={({ item }) => (
         <BeverageVariant
           variant={item}

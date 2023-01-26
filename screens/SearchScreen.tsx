@@ -12,11 +12,11 @@ import {
 import SearchBar from "../components/SearchBar";
 import Ce_beverage from "../types/search/beverages";
 import { renderHighlightedValue } from "../components/utils/renderHighlightedValue";
-import { v4 as uuid } from "uuid";
 import { StackScreenProps } from "@react-navigation/stack";
 import { SearchStackParamList } from "../App";
 import { useEffect } from "react";
 import { storeRecentSearches } from "../utils/storeRecentSearches";
+import { uuid } from "../utils/uuid";
 
 type SearchScreenNavigationProps = StackScreenProps<
   SearchStackParamList,
@@ -106,9 +106,9 @@ const SearchScreen = ({ navigation, route }: SearchScreenNavigationProps) => {
                 alignContent: "center",
               }}
               onPress={() => {
-                storeRecentSearches({ type: "beverage", query: beverage.name });
+                storeRecentSearches({ type: "beverage", query: result.value });
                 navigation.navigate("BeverageScreen", {
-                  name: beverage?.name,
+                  name: result.value,
                 });
               }}
             >

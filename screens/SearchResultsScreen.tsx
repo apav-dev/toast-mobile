@@ -13,10 +13,11 @@ import {
   FlatList,
   Image,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { SearchStackParamList } from "../App";
-import { v4 as uuid } from "uuid";
 import Colors from "../styles/colors";
+import { uuid } from "../utils/uuid";
 
 export type SearchResultsScreenRouteProps = StackScreenProps<
   SearchStackParamList,
@@ -105,8 +106,6 @@ const SearchResultsScreen = ({
 
   // TODO: move to separate component
   const renderBeverageResult = ({ item, index }) => {
-    // the item has a primaryPhoto field, but it is not always populated. If it is check if primaryPhoto.image.thumbnails exists, if it does, find the smallest thumbnail in the list, otherwise use primaryPhoto.image.url
-
     const smallestThumbnail = item.rawData?.primaryPhoto?.image.thumbnails
       ? item.rawData?.primaryPhoto?.image.thumbnails?.reduce(
           (smallest, current) => {
@@ -119,13 +118,19 @@ const SearchResultsScreen = ({
       : item.rawData?.primaryPhoto?.image.url;
 
     return (
-      <View style={{ flex: 1 / 2, height: 200, marginVertical: 12 }}>
+      <View style={{ flex: 1 / 2, marginVertical: 12 }}>
         <View style={styles.beverageResultContainer}>
-          <View
+          <TouchableOpacity
             style={{
               padding: 20,
               borderWidth: 1,
               borderRadius: 8,
+              height: 200,
+            }}
+            onPress={() => {
+              navigation.navigate("BeverageScreen", {
+                name: item.rawData?.name,
+              });
             }}
           >
             <Image
@@ -135,7 +140,7 @@ const SearchResultsScreen = ({
               defaultSource={placeholderImg}
             />
             <Text numberOfLines={2}>{item.rawData?.name}</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     );

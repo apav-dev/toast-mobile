@@ -255,7 +255,12 @@ const SearchBar = ({
         // get total length of filterSearchResults.sections
         filterSearchResults.reduce((acc, section) => {
           return acc + section.results.length;
-        }, 0) < 1 && <RecentSearches />}
+        }, 0) < 1 && (
+          <View>
+            <RecentSearches />
+            {/* TODO: Top searches here */}
+          </View>
+        )}
       {filterSearchResponse && (
         <View style={styles.autocompleteContainer}>
           {/* <View style={{ height: 96, backgroundColor: "black" }}></View> */}

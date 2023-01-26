@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import Colors from "../styles/colors";
 import Typography from "../styles/typography";
+import { uuid } from "../utils/uuid";
 import SectionTitle from "./SectionTitle";
 
 type DetailsTableProps = {
@@ -13,7 +14,7 @@ const DetailsTable = ({ data, title }: DetailsTableProps) => {
     <>
       <SectionTitle title={title} />
       {data.map((row, index) => (
-        <View key={index} style={{ flexDirection: "row" }}>
+        <View key={uuid()} style={{ flexDirection: "row" }}>
           <View
             style={{
               ...styles.labelContainer,

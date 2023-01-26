@@ -7,10 +7,10 @@ import SectionTitle from "./SectionTitle";
 import * as Location from "expo-location";
 import Typography from "../styles/typography";
 import Colors from "../styles/colors";
-import { v4 as uuid } from "uuid";
 import Divider from "./Divider";
 import LocationArrowIcon from "./icons/LocationIcon";
 import LoadingSpinner from "./icons/LoadingSpinner";
+import { uuid } from "../utils/uuid";
 
 const LocationsList = () => {
   const searchActions = useSearchActions();

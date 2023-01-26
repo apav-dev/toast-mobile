@@ -97,7 +97,7 @@ const BeverageScreen = ({
               <Image
                 source={{ uri: imageSource }}
                 style={{ width: 150, height: 300 }}
-                defaultSource={require("../assets/bottle.png")}
+                // defaultSource={require("../assets/bottle.png")}
               />
               <View style={{ flex: 1 }}>
                 <Text

@@ -10,12 +10,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Section from "./Section";
 import SectionTitle from "./SectionTitle";
 import Divider from "./Divider";
-import { v4 as uuid } from "uuid";
 import Typography from "../styles/typography";
 import Colors from "../styles/colors";
 import SearchIcon from "./SearchIcon";
 import CloseIcon from "./icons/CloseIcon";
 import { useNavigation } from "@react-navigation/native";
+import { uuid } from "../utils/uuid";
 
 export type SearchType = "beverage" | "category" | "query";
 

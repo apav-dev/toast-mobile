@@ -1,5 +1,7 @@
 import { HighlightedValue } from "@yext/search-headless-react";
 import { Text, StyleSheet, TextStyle } from "react-native";
+import Typography from "../../styles/typography";
+import { uuid } from "../../utils/uuid";
 
 /**
   The CSS class interface for {@link renderHighlightedValue}.
@@ -36,13 +38,13 @@ export function renderHighlightedValue(
   for (const { offset, length } of substrings) {
     if (offset > curr) {
       highlightedJSX.push(
-        <Text key={curr} style={cssClasses.nonHighlighted}>
+        <Text key={uuid()} style={cssClasses.nonHighlighted}>
           {value.substring(curr, offset)}
         </Text>
       );
     }
     highlightedJSX.push(
-      <Text key={offset} style={cssClasses.highlighted}>
+      <Text key={uuid()} style={cssClasses.highlighted}>
         {value.substring(offset, offset + length)}
       </Text>
     );
@@ -50,7 +52,7 @@ export function renderHighlightedValue(
   }
   if (curr < value.length) {
     highlightedJSX.push(
-      <Text key={curr} style={cssClasses.nonHighlighted}>
+      <Text key={uuid()} style={cssClasses.nonHighlighted}>
         {value.substring(curr)}
       </Text>
     );
@@ -60,9 +62,9 @@ export function renderHighlightedValue(
 
 const styles = StyleSheet.create({
   highlighted: {
-    fontWeight: "400",
+    fontFamily: Typography.fontFamily.semiBold,
   },
   nonHighlighted: {
-    fontWeight: "bold",
+    fontFamily: Typography.fontFamily.regular,
   },
 });

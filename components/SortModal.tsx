@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import Colors from "../styles/colors";
 import Typography from "../styles/typography";
+import { uuid } from "../utils/uuid";
 import CloseIcon from "./icons/CloseIcon";
 import { SortOption } from "./Reviews";
 
@@ -69,7 +70,7 @@ const SortModal = ({
               <View style={styles.modalBody}>
                 {options.map((option) => (
                   <TouchableOpacity
-                    key={option.label}
+                    key={uuid()}
                     onPress={() => {
                       onOptionSelected(option);
                       // setSortModalVisible(false);

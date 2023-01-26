@@ -8,6 +8,7 @@ import { fetchReviews } from "../api/fetchReviews";
 import Typography from "../styles/typography";
 import Reviews from "./Reviews";
 import SectionTitle from "./SectionTitle";
+import { uuid } from "../utils/uuid";
 
 type ReviewsSectionProps = {
   beverageId: string;
@@ -51,7 +52,7 @@ const ReviewsSection = ({
             const count = (reviewResult.data.response.count || 0) as number;
             return (
               <ReviewBar
-                key={score}
+                key={uuid()}
                 score={score}
                 reviewPercentage={Number((count / (reviewCount || 1)) * 100)}
                 totalReviews={count}

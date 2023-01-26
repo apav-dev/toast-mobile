@@ -14,8 +14,8 @@ import Section from "../components/Section";
 import SectionTitle from "../components/SectionTitle";
 import Colors from "../styles/colors";
 import Typography from "../styles/typography";
-import { v4 as uuid } from "uuid";
 import { storeRecentSearches } from "../utils/storeRecentSearches";
+import { uuid } from "../utils/uuid";
 
 const HomeScreen = ({ navigation }) => {
   const { isLoading, isError, data, error } = useQuery({
@@ -73,7 +73,7 @@ const HomeScreen = ({ navigation }) => {
             />
           </Section>
           {data?.response.docs[0].c_featuredCollections.map((collection) => (
-            <Section key={collection.name}>
+            <Section key={uuid()}>
               <SectionTitle title={collection.name} />
               <FlatList
                 horizontal
