@@ -5,7 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import FontAwesome5Icons from "react-native-vector-icons/FontAwesome5";
 import HomeScreen from "./screens/HomeScreen";
 import SearchScreen from "./screens/SearchScreen";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   useFonts,
   Sora_400Regular,
@@ -27,9 +27,7 @@ import { Text } from "react-native";
 import Colors from "./styles/colors";
 import Typography from "./styles/typography";
 
-// dotenv.config()
-
-// SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
@@ -97,17 +95,42 @@ const searcher = provideHeadless({
 });
 
 function App() {
+  const [appIsReady, setAppIsReady] = useState(false);
+
   let [fontsLoaded] = useFonts({
     Sora_400Regular,
     Sora_600SemiBold,
     Sora_700Bold,
   });
 
-  const onLayoutRootView = useCallback(async () => {
+  useEffect(() => {
     if (fontsLoaded) {
-      await SplashScreen.hideAsync();
+      setAppIsReady(true);
     }
   }, [fontsLoaded]);
+
+  useEffect(() => {
+    if (appIsReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  // useEffect(() => {
+  //   async function prepare() {
+  //     try {
+  //       // Artificially delay for two seconds to simulate a slow loading
+  //       // experience. Please remove this if you copy and paste the code!
+  //       await new Promise(resolve => setTimeout(resolve, 2000));
+  //     } catch (e) {
+  //       console.warn(e);
+  //     } finally {
+  //       // Tell the application to render
+  //       setAppIsReady(true);
+  //     }
+  //   }
+
+  //   prepare();
+  // }, []);
 
   if (!fontsLoaded) {
     return null;
@@ -155,7 +178,6 @@ const HomeTabs = () => {
         name="Search"
         component={SearchStackNavigation}
         options={{
-          // headerShown: false,
           tabBarLabel: "Search",
           tabBarActiveTintColor: Colors.primary.darkRed,
           tabBarInactiveTintColor: "white",

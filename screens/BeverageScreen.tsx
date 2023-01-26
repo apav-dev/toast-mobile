@@ -18,6 +18,7 @@ import {
   provideHeadless,
   SearchHeadlessProvider,
 } from "@yext/search-headless-react";
+import LoadingSpinner from "../components/icons/LoadingSpinner";
 // import { ScrollView } from "react-native-gesture-handler";
 
 export type SearchResultsScreenRouteProps = StackScreenProps<
@@ -46,14 +47,15 @@ const BeverageScreen = ({
   const [imageSource, setImageSource] = useState("");
   const [selectedVariantId, setSelectedVariantId] = useState<string>("");
 
+  // TODO: fetch by id instead of name
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["beverage", name],
     queryFn: () => getBeverageByName(name),
   });
 
   useEffect(() => {
-    if (data?.response.docs[0]) {
-      const bev = data?.response.docs[0];
+    if (!isLoading && data?.response.docs[0]) {
+      const bev = data.response.docs[0];
       console.log(bev);
 
       setBeverage(bev);
@@ -69,7 +71,7 @@ const BeverageScreen = ({
         setSelectedVariantId(bev.c_variantBeverages[0].id);
       }
     }
-  }, [data]);
+  }, [data, isLoading]);
 
   const handleVariantPress = (variant: BeverageVariant) => {
     if (variant.primaryPhoto) {
@@ -78,127 +80,130 @@ const BeverageScreen = ({
     setSelectedVariantId(variant.id);
   };
 
-  // TODO: Add loading state
   return (
     <SearchHeadlessProvider searcher={searcher}>
-      <ScrollView style={styles.container}>
-        <Section
-          sectionStyles={{
-            marginTop: 0,
-            borderBottomColor: Colors.neutral.s200,
-            borderBottomWidth: 1,
-          }}
-        >
-          <View style={styles.headingContainer}>
-            <Image
-              source={{ uri: imageSource }}
-              style={{ width: 150, height: 300 }}
-              defaultSource={require("../assets/bottle.png")}
-            />
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  marginLeft: 10,
-                  paddingVertical: 20,
-                  fontSize: 20,
-                  fontFamily: Typography.fontFamily.semiBold,
-                }}
-              >
-                {name}
-              </Text>
-              <View style={{ marginLeft: 10 }}>
-                {(ratingAgg?.averageRating || beverage?.c_rating) && (
-                  <StarRating
-                    rating={Number(
-                      ratingAgg?.averageRating || beverage?.c_rating
-                    )}
-                  />
-                )}
-                {ratingAgg?.averageRating && (
-                  <View style={{ marginTop: 8, flexDirection: "row" }}>
-                    <Text
-                      style={{
-                        fontFamily: "Sora_400Regular",
-                        fontSize: 16,
-                        color: Colors.neutral.s700,
-                        paddingRight: 5,
-                      }}
-                    >
-                      {ratingAgg.averageRating.toFixed(1)}
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "Sora_400Regular",
-                        fontSize: 16,
-                        color: Colors.neutral.s700,
-                      }}
-                    >
-                      {`(${ratingAgg.reviewCount} ratings)`}
-                    </Text>
-                  </View>
-                )}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <ScrollView style={styles.container}>
+          <Section
+            sectionStyles={{
+              marginTop: 0,
+              borderBottomColor: Colors.neutral.s200,
+              borderBottomWidth: 1,
+            }}
+          >
+            <View style={styles.headingContainer}>
+              <Image
+                source={{ uri: imageSource }}
+                style={{ width: 150, height: 300 }}
+                defaultSource={require("../assets/bottle.png")}
+              />
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    paddingVertical: 20,
+                    fontSize: 20,
+                    fontFamily: Typography.fontFamily.semiBold,
+                  }}
+                >
+                  {name}
+                </Text>
+                <View style={{ marginLeft: 10 }}>
+                  {(ratingAgg?.averageRating || beverage?.c_rating) && (
+                    <StarRating
+                      rating={Number(
+                        ratingAgg?.averageRating || beverage?.c_rating
+                      )}
+                    />
+                  )}
+                  {ratingAgg?.averageRating && (
+                    <View style={{ marginTop: 8, flexDirection: "row" }}>
+                      <Text
+                        style={{
+                          fontFamily: "Sora_400Regular",
+                          fontSize: 16,
+                          color: Colors.neutral.s700,
+                          paddingRight: 5,
+                        }}
+                      >
+                        {ratingAgg.averageRating.toFixed(1)}
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: "Sora_400Regular",
+                          fontSize: 16,
+                          color: Colors.neutral.s700,
+                        }}
+                      >
+                        {`(${ratingAgg.reviewCount} ratings)`}
+                      </Text>
+                    </View>
+                  )}
+                </View>
               </View>
             </View>
-          </View>
-          {beverage?.c_variantBeverages && (
-            <BeverageVariantList
-              variants={beverage.c_variantBeverages}
-              onVariantPress={handleVariantPress}
-              selectedVariantId={selectedVariantId}
-            />
-          )}
-        </Section>
-        <LocationsList />
-        <Section
-          sectionStyles={{
-            borderTopWidth: 1,
-            borderTopColor: Colors.neutral.s200,
-          }}
-        >
-          <DetailsTable
-            title="Details"
-            data={[
-              [
-                // the category isn't guaranteed to be correct as it depends on the Knowledge Graph
-                "Category",
-                beverage?.c_beverageCategories[
-                  beverage.c_beverageCategories.length - 1
-                ].name,
-              ],
-              // TODO: add state to origin if it exists
-              ["Origin", beverage?.c_originCountry],
-              [
-                "ABV",
-                Number(beverage?.c_abv) % 1 === 0
-                  ? beverage?.c_abv + ".0%"
-                  : beverage?.c_abv + "%",
-              ],
-            ]}
-          />
-          <View style={{ paddingVertical: 16 }}>
-            <SectionTitle title="Description" />
-            <Text
-              style={{
-                fontFamily: Typography.fontFamily.regular,
-                ...Typography.fontSize.x20,
-                color: Colors.neutral.s700,
-                padding: 10,
-              }}
-            >
-              {beverage?.description}
-            </Text>
-          </View>
-        </Section>
-        {ratingAgg && (
-          <ReviewsSection
-            beverageId={beverage.id}
-            reviewCount={ratingAgg.reviewCount}
-            aggregateRating={Number(
-              (ratingAgg?.averageRating || beverage?.c_rating).toFixed(1)
+            {beverage?.c_variantBeverages && (
+              <BeverageVariantList
+                variants={beverage.c_variantBeverages}
+                onVariantPress={handleVariantPress}
+                selectedVariantId={selectedVariantId}
+              />
             )}
-          ></ReviewsSection>
-        )}
-      </ScrollView>
+          </Section>
+          <LocationsList />
+          <Section
+            sectionStyles={{
+              borderTopWidth: 1,
+              borderTopColor: Colors.neutral.s200,
+            }}
+          >
+            <DetailsTable
+              title="Details"
+              data={[
+                [
+                  // the category isn't guaranteed to be correct as it depends on the Knowledge Graph
+                  "Category",
+                  beverage?.c_beverageCategories[
+                    beverage.c_beverageCategories.length - 1
+                  ].name,
+                ],
+                // TODO: add state to origin if it exists
+                ["Origin", beverage?.c_originCountry],
+                [
+                  "ABV",
+                  Number(beverage?.c_abv) % 1 === 0
+                    ? beverage?.c_abv + ".0%"
+                    : beverage?.c_abv + "%",
+                ],
+              ]}
+            />
+            <View style={{ paddingVertical: 16 }}>
+              <SectionTitle title="Description" />
+              <Text
+                style={{
+                  fontFamily: Typography.fontFamily.regular,
+                  ...Typography.fontSize.x20,
+                  color: Colors.neutral.s700,
+                  padding: 10,
+                }}
+              >
+                {beverage?.description}
+              </Text>
+            </View>
+          </Section>
+          {ratingAgg && (
+            <ReviewsSection
+              beverageId={beverage.id}
+              reviewCount={ratingAgg.reviewCount}
+              aggregateRating={Number(
+                (ratingAgg?.averageRating || beverage?.c_rating).toFixed(1)
+              )}
+            ></ReviewsSection>
+          )}
+        </ScrollView>
+      )}
     </SearchHeadlessProvider>
   );
 };
@@ -206,7 +211,6 @@ const BeverageScreen = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.neutral.s100,
-    overflow: "scroll",
   },
   headingContainer: {
     flexDirection: "row",

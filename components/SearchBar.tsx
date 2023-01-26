@@ -13,8 +13,10 @@ import {
   FilterSearchResponse,
   AutocompleteResult,
 } from "@yext/search-headless-react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSynchronizedRequest } from "../hooks/useSynchronizedRequest";
+import Colors from "../styles/colors";
+import RecentSearches from "./RecentSearches";
+import { storeRecentSearches } from "../utils/storeRecentSearches";
 
 type SearchBarProps = {
   /**
@@ -163,29 +165,14 @@ const SearchBar = ({
     return [];
   }, [filterSearchResponse]);
 
-  const storeRecentSearches = async (search: string) => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("recentSearches");
-      const recentSearches = jsonValue != null ? JSON.parse(jsonValue) : [];
-      recentSearches.push(search);
-      const uniqueRecentSearches = recentSearches.filter(
-        (search, index, self) => self.indexOf(search) === index
-      );
-      const jsonRecentSearches = JSON.stringify(uniqueRecentSearches);
-      await AsyncStorage.setItem("recentSearches", jsonRecentSearches);
-    } catch (e) {
-      console.error("Error saving recent searches.\n", e);
-    }
-  };
-
-  const fetchRecentSearches = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("recentSearches");
-      return jsonValue != null ? JSON.parse(jsonValue) : [];
-    } catch (e) {
-      console.error("Error fetching recent searches.\n", e);
-    }
-  };
+  // const fetchRecentSearches = async () => {
+  //   try {
+  //     const jsonValue = await AsyncStorage.getItem("recentSearches");
+  //     return jsonValue != null ? JSON.parse(jsonValue) : [];
+  //   } catch (e) {
+  //     console.error("Error fetching recent searches.\n", e);
+  //   }
+  // };
 
   const renderAutocompleteSuggestions = () => {
     if (filterSearchFields && filterSearchResults.length > 0) {
@@ -215,14 +202,15 @@ const SearchBar = ({
     return null;
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
+    storeRecentSearches({ type: "query", query: input });
     if (onSearch) {
       onSearch(input);
     }
   };
 
   return (
-    <>
+    <View style={{ position: "relative", flex: 1 }}>
       <View style={styles.searchBarContainer}>
         <Animated.View
           style={[
@@ -262,13 +250,39 @@ const SearchBar = ({
           <View style={styles.noAutocomplete} />
         </TouchableWithoutFeedback>
       )} */}
+
+      {!input &&
+        // get total length of filterSearchResults.sections
+        filterSearchResults.reduce((acc, section) => {
+          return acc + section.results.length;
+        }, 0) < 1 && <RecentSearches />}
       {filterSearchResponse && (
         <View style={styles.autocompleteContainer}>
           {/* <View style={{ height: 96, backgroundColor: "black" }}></View> */}
           {renderEntityPreviews(filterSearchResults)}
         </View>
       )}
-    </>
+      {isFocused &&
+        !input &&
+        // get total length of filterSearchResults.sections
+        filterSearchResults.reduce((acc, section) => {
+          return acc + section.results.length;
+        }, 0) < 1 && (
+          <TouchableOpacity
+            style={{
+              backgroundColor: Colors.neutral.s500,
+              position: "absolute",
+              zIndex: 2,
+              top: 46,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              opacity: 0.3,
+            }}
+            onPress={handleCancelSearch}
+          />
+        )}
+    </View>
   );
 };
 

@@ -49,6 +49,7 @@ const SearchResultsScreen = ({
   const searchActions = useSearchActions();
 
   useEffect(() => {
+    setDisplayableResults([]);
     if (query) {
       executeSearch(query);
     } else if (beverageTypeName) {
@@ -69,12 +70,7 @@ const SearchResultsScreen = ({
       setDisplayableResults([]);
       searchActions.setOffset(0);
     };
-  }, []);
-
-  // use effect that logs the length of the results array
-  useEffect(() => {
-    console.log("displayableResults.length", displayableResults.length);
-  }, [displayableResults]);
+  }, [query, beverageTypeName]);
 
   const executeSearch = (
     query = "",
@@ -129,7 +125,6 @@ const SearchResultsScreen = ({
             style={{
               padding: 20,
               borderWidth: 1,
-              // borderColor: "gray",
               borderRadius: 8,
             }}
           >
@@ -149,7 +144,6 @@ const SearchResultsScreen = ({
   const loadMoreItems = () => {
     // TODO: only execute query if there are more results to fetch
     if ((offset / limit) * limit < resultCount) {
-      console.log("loading more items");
       searchActions.setOffset(offset + limit);
       executeSearch();
     }

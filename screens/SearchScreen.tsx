@@ -16,6 +16,7 @@ import { v4 as uuid } from "uuid";
 import { StackScreenProps } from "@react-navigation/stack";
 import { SearchStackParamList } from "../App";
 import { useEffect } from "react";
+import { storeRecentSearches } from "../utils/storeRecentSearches";
 
 type SearchScreenNavigationProps = StackScreenProps<
   SearchStackParamList,
@@ -32,6 +33,7 @@ const SearchScreen = ({ navigation, route }: SearchScreenNavigationProps) => {
   }, [verticalKey]);
 
   const handleEntityPress = (result: AutocompleteResult) => {
+    storeRecentSearches({ type: "category", query: result.value });
     if (result.key === "c_beverageCategories.name") {
       navigation.navigate("Results", {
         beverageTypeName: result.value,
@@ -95,7 +97,6 @@ const SearchScreen = ({ navigation, route }: SearchScreenNavigationProps) => {
             | Ce_beverage
             | undefined;
           const beverageImg = beverage?.primaryPhoto?.image.url;
-          console.log(result.relatedItem?.rawData);
           return (
             <TouchableOpacity
               key={uuid()}
@@ -105,6 +106,7 @@ const SearchScreen = ({ navigation, route }: SearchScreenNavigationProps) => {
                 alignContent: "center",
               }}
               onPress={() => {
+                storeRecentSearches({ type: "beverage", query: beverage.name });
                 navigation.navigate("BeverageScreen", {
                   name: beverage?.name,
                 });

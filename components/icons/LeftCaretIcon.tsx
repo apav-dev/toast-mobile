@@ -1,5 +1,4 @@
 import { FontAwesome } from "react-native-vector-icons";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 type LeftCaretIconProps = {
   size?: number;

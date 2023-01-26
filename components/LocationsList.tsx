@@ -10,6 +10,7 @@ import Colors from "../styles/colors";
 import { v4 as uuid } from "uuid";
 import Divider from "./Divider";
 import LocationArrowIcon from "./icons/LocationIcon";
+import LoadingSpinner from "./icons/LoadingSpinner";
 
 const LocationsList = () => {
   const searchActions = useSearchActions();
@@ -45,13 +46,17 @@ const LocationsList = () => {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
-      searchActions.setLocationRadius(10000000);
+      searchActions.setLocationRadius(16093.4);
       searchActions.setVerticalLimit(3);
       searchActions.executeVerticalQuery();
     }
   }, [location]);
 
   const calculateDistance = (lat: number, lon: number) => {
+    if (!location) {
+      return;
+    }
+
     const R = 6371e3; // metres
     const φ1 = (lat * Math.PI) / 180; // φ, λ in radians
     const φ2 = (location.coords.latitude * Math.PI) / 180;
@@ -65,39 +70,58 @@ const LocationsList = () => {
 
     const d = R * c; // in metres
     // convert to miles
-    return d * 0.000621371;
+    return (d * 0.000621371).toFixed(2);
   };
 
   return (
-    // TODO: add loading state
     <Section>
       <SectionTitle title="Locations" />
-      {locations?.map((location, index) => (
+      {isLoading || !location ? (
+        <View
+          style={{
+            justifyContent: "center",
+            flex: 1,
+            flexDirection: "row",
+            marginVertical: 8,
+          }}
+        >
+          <LoadingSpinner size={30} />
+        </View>
+      ) : (
         <>
-          <View key={uuid()} style={styles.locationCard}>
-            <View
-              style={{ justifyContent: "space-between", flexDirection: "row" }}
-            >
-              <Text style={styles.locationName}>{location.name}</Text>
-              <View style={{ flexDirection: "row" }}>
-                <LocationArrowIcon />
-                <Text style={styles.locationDistance}>
-                  {calculateDistance(
-                    location.yextDisplayCoordinate.latitude,
-                    location.yextDisplayCoordinate.longitude
-                  ).toFixed(2)}{" "}
-                  mi
+          {locations?.map((location, index) => (
+            <View key={uuid()}>
+              <View style={styles.locationCard}>
+                <View
+                  style={{
+                    justifyContent: "space-between",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Text style={styles.locationName}>{location.name}</Text>
+                  <View style={{ flexDirection: "row" }}>
+                    <LocationArrowIcon />
+                    <Text style={styles.locationDistance}>
+                      {calculateDistance(
+                        location.yextDisplayCoordinate.latitude,
+                        location.yextDisplayCoordinate.longitude
+                      )}
+                      mi
+                    </Text>
+                  </View>
+                </View>
+                <Text style={styles.locationAddress}>
+                  {location.address.line1}
                 </Text>
+                <Text
+                  style={styles.locationAddress}
+                >{`${location.address.city}, ${location.address.region} ${location.address.postalCode}`}</Text>
               </View>
+              {index !== locations.length - 1 && <Divider />}
             </View>
-            <Text style={styles.locationAddress}>{location.address.line1}</Text>
-            <Text
-              style={styles.locationAddress}
-            >{`${location.address.city}, ${location.address.region} ${location.address.postalCode}`}</Text>
-          </View>
-          {index !== locations.length - 1 && <Divider />}
+          ))}
         </>
-      ))}
+      )}
     </Section>
   );
 };
