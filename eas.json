@@ -3,8 +3,9 @@
     "preview": {
       "distribution": "internal",
       "ios": {
-        "enterpriseProvisioning": "universal"
+        "enterpriseProvisioning": "adhoc"
       }
-    }
+    },
+    "production": {}
   }
 }
