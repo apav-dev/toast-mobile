@@ -7,7 +7,7 @@ export const fetchReviews = async (
   params?: Record<string, string | number>,
   pageToken?: string
 ): Promise<ReviewApiResponse> => {
-  let requestString = `https://streams.yext.com/v2/accounts/me/api/fetchReviews?api_key=${CONTENT_API_KEY}&v=20221114&entity.id=${id}`;
+  let requestString = `https://streams.yext.com/v2/accounts/me/api/fetchReviews?api_key=75fcb4c0fdec8f3c001872acb958a7ba&v=20221114&entity.id=${id}`;
   if (pageToken) {
     requestString += `&pageToken=${pageToken}`;
   }

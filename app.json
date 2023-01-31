@@ -14,19 +14,23 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Toast needs to access your location to find nearby stores.",
         "NSLocationUsage": "Toast needs to access your location to find nearby stores."
-      }
+      },
+      "bundleIdentifier": "com.apavlick.toastmobile"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.apavlick.toastmobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
